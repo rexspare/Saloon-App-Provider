@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../utils/Common";
+import { COLORS ,FONTS, FS_val} from "../../utils/Common";
 
 const commonStyles = StyleSheet.create({
 
@@ -11,6 +11,14 @@ const commonStyles = StyleSheet.create({
     _center: {
         justifyContent: "center",
         alignItems: "center"
+    },
+    _errorText :{
+        color:"#ff0000",
+        fontFamily:FONTS.WorkSans_Medium,
+        alignSelf:"flex-start",
+        marginLeft: "6%",
+        marginTop:10,
+        fontSize: FS_val(13, 700)
     },
 
     _border :{

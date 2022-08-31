@@ -1,18 +1,20 @@
-import { View, SafeAreaView, StyleSheet } from 'react-native'
-import React, { useState , useEffect} from 'react'
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import CommonStyles from '../../assets/styles/CommonStyles'
 import { COLORS, FS_height, height, width } from '../../utils/Common'
 import { Auth_Input } from '../../components/Input'
 import { Auth_Button, Social_Button, Text_Button } from '../../components/Buttons'
-import { Layout, Heading, Text_type1, Label, CurveHeader } from '../../components'
+import { Layout, Heading, Text_type1, Label, CurveHeader, If } from '../../components'
 import { lang } from '../../assets/languages'
 import EmailSelector from '../../components/EmailSelector'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import apiRequest from '../../Data/remote/Webhandler'
+import { ROUTES } from '../../Data/remote/Routes'
 
 const AuthScreen = (props) => {
-  const [provider, setprovider] = useState('')
   const [email, setemail] = useState('')
-  const [finalEmail, setfinalEmail] = useState()
+  const [isEmailEmpty, setisEmailEmpty] = useState(false)
+  const [isLoading, setisLoading] = useState(false)
 
   const { navigation } = props
 
@@ -22,6 +24,31 @@ const AuthScreen = (props) => {
       offlineAccess: true
     });
   }, [])
+
+
+  const handlecontinue = async () => {
+    setisEmailEmpty(false)
+    setisLoading(true)
+    if (email != "") {
+      const result = await apiRequest({
+        method: "post",
+        url: ROUTES.CHECK_USER,
+        data: { email },
+      }).catch((err) => {
+        console.log(err)
+      });
+      if (result.data.status) {
+        props.navigation.navigate("SignIn", { email })
+      } else {
+        props.navigation.navigate("SignUp", { email })
+
+      }
+    } else {
+      setisEmailEmpty(true)
+    }
+    setisLoading(false)
+
+  }
 
   const GoogleSignUp = async () => {
     try {
@@ -43,6 +70,8 @@ const AuthScreen = (props) => {
     }
   };
 
+
+
   return (
     <SafeAreaView style={CommonStyles.container}>
       <Layout fixed={false}>
@@ -53,7 +82,7 @@ const AuthScreen = (props) => {
           {/*  ==============   SECTION 1   =================== */}
           <View style={styles.HeaderContainer}>
             <Heading > {lang._1}</Heading>
-            <Text_type1 style={{paddingHorizontal: '5%'}}> {lang._2} </Text_type1>
+            <Text_type1 style={{ paddingHorizontal: '5%' }}> {lang._2} </Text_type1>
           </View>
           {/*  ==============   END   =================== */}
 
@@ -64,12 +93,18 @@ const AuthScreen = (props) => {
               placeholder={lang._7}
               value={email}
               onChange={(txt) => setemail(txt)}
+              isInvalid={isEmailEmpty}
             />
+            <If condition={isEmailEmpty}>
+              <Text style={CommonStyles._errorText}>This Field is required</Text>
+            </If>
 
             <EmailSelector onpress={(provider) => setemail(email.split("@")[0] + provider)} />
 
             <Auth_Button title={lang._3} style={{ marginVertical: 15 }}
-              onpress={() => navigation.navigate("SignUp",{email : email})} />
+              onpress={() => handlecontinue()}
+              isLoading={isLoading}
+            />
             <Text_type1 style={styles.orTxt}>OR</Text_type1>
           </View>
 
@@ -79,11 +114,11 @@ const AuthScreen = (props) => {
           <View style={[styles.sectionContainer, { paddingTop: 0 }]}>
             <Social_Button type="facebook" />
             <Social_Button type="google" style={{ marginVertical: 20 }}
-            onpress={() => GoogleSignUp()} />
+              onpress={() => GoogleSignUp()} />
 
             <Label>{lang._4}</Label>
             <Text_type1 style={{ color: COLORS.subtle, marginVertical: 3 }}>{lang._5}</Text_type1>
-            <Text_Button textStyles={{color: COLORS.Links}} title={lang._6} />
+            <Text_Button textStyles={{ color: COLORS.Links }} title={lang._6} />
           </View>
 
           {/*  ==============   END   =================== */}
