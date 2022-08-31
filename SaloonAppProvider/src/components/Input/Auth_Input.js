@@ -2,26 +2,33 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react'
 import { COLORS, FONTS, FS_val } from '../../utils/Common'
 import commonStyles from '../../assets/styles/CommonStyles'
-import Heading from '../Heading'
 import If from '../If'
 import Feather from 'react-native-vector-icons/Feather';
 
 const Auth_Input = (props) => {
 
     const [isSecureTextEntry, setisSecureTextEntry] = useState(true)
-
+    const { Icon, isError } = props;
     return (
         <View style={[Styles.mainContainer, props.styles]}>
-            <Heading style={{ textAlign: 'left', marginVertical: 8, letterSpacing: 0.8 }}
-                fontSize={FS_val(14, 700)}>
-                {props.title}
-            </Heading>
-            <View style={[Styles.inputContainer, { backgroundColor: "#EFEFEF" }]}>
+
+            <View style={[Styles.inputContainer,
+            { backgroundColor: COLORS.primary, borderColor: props.isInvalid ? "#ff0000" : COLORS.subtle }]}>
+                <If condition={Icon}>
+                    <TouchableOpacity
+                        style={[Styles.iconContainer]}
+                        onPress={() => setisSecureTextEntry(!isSecureTextEntry)}>
+                        {Icon}
+                    </TouchableOpacity>
+                </If>
                 <TextInput
-                    style={[Styles.inputStyle, { color: COLORS.secondary }]}
+                    style={[Styles.inputStyle, { color: COLORS.secondary , paddingLeft : Icon ? 0 : 10}]}
                     secureTextEntry={props.isPassword ? isSecureTextEntry : false}
                     placeholder={props.placeholder}
+                    value={props?.value}
                     placeholderTextColor={COLORS.subtle}
+                    onChangeText={props.onChange}
+                    editable={props.editable}
                 />
                 <If condition={props.isPassword}>
                     <TouchableOpacity style={[Styles.iconContainer]}
@@ -36,32 +43,35 @@ const Auth_Input = (props) => {
 }
 
 Auth_Input.defaultProps = {
-    title: "title",
-    placeholder: "placeholer",
+    placeholder: "placeholder",
     onChange: () => { },
-    isPassword: false
+    isPassword: false,
+    isInvalid: false,
+    editable : true
 }
 
 const Styles = StyleSheet.create({
     mainContainer: {
-        width: '80%',
-        alignSelf: "center"
+        width: '88%',
+        maxWidth: 500,
+        alignSelf: "center",
     },
     inputContainer: {
-        height: 52,
+        height: 50,
         flexDirection: "row",
-        elevation: 5,
         borderRadius: 5,
+        ...commonStyles._border,
+        elevation: 3
     },
     inputStyle: {
         flex: 1,
-        height: 52,
+        height: 50,
         fontFamily: FONTS.WorkSans_Medium,
         fontSize: FS_val(14.5, 700),
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
     },
     iconContainer: {
-        width: '17%',
+        width: '15%',
         ...commonStyles._center
     }
 

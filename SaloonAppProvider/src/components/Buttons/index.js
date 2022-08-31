@@ -1,7 +1,9 @@
-import W100_Button from "./W100_Button";
 import Text_Button from "./Text_Button";
+import Auth_Button from "./auth_Button";
+import Social_Button from "./Social_Button";
 
 export {
-    W100_Button,
-    Text_Button
+    Text_Button,
+    Auth_Button,
+    Social_Button
 }

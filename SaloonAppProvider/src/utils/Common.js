@@ -22,9 +22,11 @@ const COLORS = {
     pure_White: "#FFFFFF",
     pure_Black: "#000000",
     accent: "#f9db8f",
+    _accents:"#fbd74b",
     accent_rgba: "rgba(249, 219, 143, 255)",
     subtle :"#878c92",
-    success :"#00a36e"
+    success :"#00a36e",
+    Links :"#0044CC"
 
 }
 

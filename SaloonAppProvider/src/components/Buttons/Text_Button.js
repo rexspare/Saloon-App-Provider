@@ -26,14 +26,14 @@ Text_Button.defaultProps = {
 
 const styles = StyleSheet.create({
     btnConatiner: {
-        height: 45,
         ...commonStyles._center,
     },
 
     btnText :{
-        fontFamily: FONTS.Merriweather_Bold,
-        color:COLORS.primary_Brand,
-        fontSize: FS_val(16, 700)
+        fontFamily: FONTS.WorkSans_Regular,
+        color:COLORS.accent,
+        fontSize: FS_val(15, 700),
+        letterSpacing:-0.8
     }
 
 })

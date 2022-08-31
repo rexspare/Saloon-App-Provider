@@ -1,9 +1,8 @@
 import { Text , StyleSheet} from 'react-native'
 import React from 'react'
 import { COLORS, FONTS, FS_height, FS_val } from '../utils/Common';
-import { useSelector } from 'react-redux';
 
-const Heading = ({children, fontSize =FS_height(3.25) , style}) => {
+const Text_type1 = ({children, fontSize = FS_height(2.2) , style}) => {
     return (
       <Text style={[ {fontSize, color: COLORS.secondary}, _style.textStyle, style]}>
         {children}
@@ -13,10 +12,10 @@ const Heading = ({children, fontSize =FS_height(3.25) , style}) => {
 
   const _style = StyleSheet.create({
     textStyle: {
-      fontFamily: FONTS.WorkSans_SemiBold,
-      letterSpacing: 0.7,
+      fontFamily: FONTS.WorkSans_Regular,
+    //   letterSpacing: 0.7,
       textAlign:"center"
     },
   });
 
-export default Heading
+export default Text_type1

@@ -1,12 +1,19 @@
-import { View, Text } from 'react-native'
+import { Image } from 'react-native'
 import React from 'react'
-import { LightBranding, DarkBranding } from '../assets/svg';
-import { useSelector } from 'react-redux';
 
-const Branding = () => {
+const Branding = ({style}) => {
   return (
     <>
-        <LightBranding width={150} height={100} />
+       <Image 
+       source={require("../assets/images/appicon.png")}
+       style={{
+        width : 60,
+        height : 60,
+        borderRadius: 10,
+        elevation:5,
+        ...style
+       }}
+       />
     </>
   )
 }

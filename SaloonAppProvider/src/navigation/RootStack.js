@@ -7,6 +7,8 @@ import Home from '../screens/Home'
 import Appointment from '../screens/Appointment';
 import Profile from '../screens/Profile';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AuthScreen from '../screens/Authentication';
+import AuthStack from './AuthStack';
 
 
 const Tab = createBottomTabNavigator();
@@ -14,8 +16,8 @@ export default function RootStack() {
 
   return (
     <NavigationContainer>
-      <StatusBar barStyle={"dark-content"}
-        backgroundColor={COLORS.primary} />
+      <StatusBar barStyle={"light-content"}
+        backgroundColor={COLORS.secondary } />
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
@@ -47,7 +49,7 @@ export default function RootStack() {
               )
             }
           }} />
-        <Tab.Screen name="Profile" component={Profile}
+        <Tab.Screen name="Profile" component={AuthStack}
           options={{
             tabBarIcon: ({ size, focused, color }) => {
               return (

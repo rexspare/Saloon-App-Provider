@@ -1,10 +1,21 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "../../utils/Common";
 
 const commonStyles = StyleSheet.create({
+
+    container :{
+        flex:1,
+        backgroundColor:COLORS.primary,
+    },
 
     _center: {
         justifyContent: "center",
         alignItems: "center"
+    },
+
+    _border :{
+        borderWidth:1,
+        borderColor : COLORS.subtle
     }
     ,
     fs_12: { fontSize: 12 },
