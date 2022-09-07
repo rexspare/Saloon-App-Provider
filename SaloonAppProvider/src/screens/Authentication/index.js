@@ -10,6 +10,9 @@ import EmailSelector from '../../components/EmailSelector'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import apiRequest from '../../Data/remote/Webhandler'
 import { ROUTES } from '../../Data/remote/Routes'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useDispatch } from 'react-redux'
+import { registerUser, setUser, setIsUserLoggedIn } from '../../Data/Local/Store/Actions/AuthActions'
 
 const AuthScreen = (props) => {
   const [email, setemail] = useState('')
@@ -17,6 +20,7 @@ const AuthScreen = (props) => {
   const [isLoading, setisLoading] = useState(false)
 
   const { navigation } = props
+  const dispatch = useDispatch()
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -24,7 +28,6 @@ const AuthScreen = (props) => {
       offlineAccess: true
     });
   }, [])
-
 
   const handlecontinue = async () => {
     setisEmailEmpty(false)
@@ -36,11 +39,12 @@ const AuthScreen = (props) => {
         data: { email },
       }).catch((err) => {
         console.log(err)
+        setisLoading(false)
       });
       if (result.data.status) {
-        props.navigation.navigate("SignIn", { email })
+        navigation.navigate("SignIn", { email })
       } else {
-        props.navigation.navigate("SignUp", { email })
+        navigation.navigate("SignUp", { email })
 
       }
     } else {
@@ -51,10 +55,25 @@ const AuthScreen = (props) => {
   }
 
   const GoogleSignUp = async () => {
+    setisLoading(true)
     try {
       await GoogleSignin.hasPlayServices();
-      await GoogleSignin.signIn().then(result => { console.log(result) });
+      await GoogleSignin.signIn().then(async (result) => {
+        const response = await dispatch(
+          registerUser({
+            email: result.user?.email,
+            username: result.user?.name,
+            role: 'customer',
+            googleID: result.user?.id
+          },
+            () => { })
+        );
+        if (response.authenticity === true) {
+          callBack(true)
+        }
+      });
     } catch (error) {
+      setisLoading(false)
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
         alert('User cancelled the login flow !');
@@ -68,8 +87,24 @@ const AuthScreen = (props) => {
         console.log(error)
       }
     }
+    setisLoading(false)
   };
 
+  const callBack = () => {
+    dispatch(setUser({ email: "email@gmail.com" }))
+    dispatch(setIsUserLoggedIn(true))
+  }
+
+ 
+
+  useEffect(() => {
+    AsyncStorage.getItem("@Email")
+      .then((email) => {
+        if (email) {
+          navigation.navigate("Verify", { email: email })
+        }
+      })
+  }, [])
 
 
   return (
@@ -82,7 +117,7 @@ const AuthScreen = (props) => {
           {/*  ==============   SECTION 1   =================== */}
           <View style={styles.HeaderContainer}>
             <Heading > {lang._1}</Heading>
-            <Text_type1 style={{ paddingHorizontal: '5%' }}> {lang._2} </Text_type1>
+            <Text_type1 > {lang._2} </Text_type1>
           </View>
           {/*  ==============   END   =================== */}
 
@@ -95,6 +130,7 @@ const AuthScreen = (props) => {
               onChange={(txt) => setemail(txt)}
               isInvalid={isEmailEmpty}
             />
+
             <If condition={isEmailEmpty}>
               <Text style={CommonStyles._errorText}>This Field is required</Text>
             </If>
@@ -103,8 +139,7 @@ const AuthScreen = (props) => {
 
             <Auth_Button title={lang._3} style={{ marginVertical: 15 }}
               onpress={() => handlecontinue()}
-              isLoading={isLoading}
-            />
+              isLoading={isLoading} />
             <Text_type1 style={styles.orTxt}>OR</Text_type1>
           </View>
 
@@ -118,7 +153,7 @@ const AuthScreen = (props) => {
 
             <Label>{lang._4}</Label>
             <Text_type1 style={{ color: COLORS.subtle, marginVertical: 3 }}>{lang._5}</Text_type1>
-            <Text_Button textStyles={{ color: COLORS.Links }} title={lang._6} />
+            <Text_Button title={lang._6} />
           </View>
 
           {/*  ==============   END   =================== */}
@@ -154,11 +189,3 @@ const styles = StyleSheet.create({
 })
 
 export default AuthScreen
-
-
-// Valid from: Wed Aug 31 10:40:30 PDT 2022 until: Sun Jan 16 09:40:30 PST 2050
-// Certificate fingerprints:
-//          SHA1: 28:9F:5A:CC:46:75:FB:DC:1A:73:CE:73:29:DE:CE:71:43:1A:E0:7D
-//          SHA256: 29:02:06:71:86:40:9C:38:7C:46:9A:93:CC:D1:3B:2F:65:5C:20:CD:91:0F:42:68:86:03:95:A9:39:02:99:FF
-// Signature algorithm name: SHA256withRSA
-// Subject Public Key Algorithm: 2048-bit RSA key

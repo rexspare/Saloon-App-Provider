@@ -9,63 +9,42 @@ import { Auth_Button, Social_Button, Text_Button } from '../../../components/But
 import apiRequest from '../../../Data/remote/Webhandler'
 import { ROUTES } from '../../../Data/remote/Routes'
 import { showFlash } from '../../../utils/MyUtils'
-import { useDispatch } from 'react-redux'
-import {setUser, setIsUserLoggedIn} from '../../../Data/Local/Store/Actions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const SignIn = (props) => {
+const Verify = (props) => {
+  const [togglePolicy, settogglePolicy] = useState(false)
+  const [toggleNotification, settoggleNotification] = useState(false)
   const { navigation, route } = props
-  const dispatch = useDispatch()
-  const [password, setpassword] = useState("")
+
   const [isLoading, setisLoading] = useState(false)
+  const [token, settoken] = useState('')
 
   const handlecontinue = async () => {
     setisLoading(true)
-    if (password != "") {
+    if (token != "") {
       const result = await apiRequest({
         method: "post",
-        url: ROUTES.LOGIN,
-        data: {email :route.params.email, password }
+        url: ROUTES.VERIFY_USER,
+        data: { token },
       }).catch((err) => {
         showFlash("Somehomg Went Wrong", "danger", 'auto')
         setisLoading(false)
       });
-      if (result?.data?.status) {
+      if (result.data.status) {
         showFlash(result.data.message, 'success', 'none')
-        dispatch(setUser({email : route.params.email}))
-        dispatch(setIsUserLoggedIn(true))
+        props.navigation.navigate("SignIn", { email : route.params.email})
         AsyncStorage.removeItem("@Email")
       } else {
         showFlash(result.data.message, 'danger', 'none')
 
       }
     } else {
-        showFlash("Please Enter your password!", "warning", "auto")
+        showFlash("Please Enter the OTP sent!", "warning", "auto")
     }
     setisLoading(false)
 
   }
-
-  const handleForgot = async () => {
-    setisLoading(true)
-      const result = await apiRequest({
-        method: "post",
-        url: ROUTES.RESET_PASSWORD,
-        data: { email : route.params.email },
-      }).catch((err) => {
-        showFlash("Somehomg Went Wrong", "danger", 'auto')
-        setisLoading(false)
-      });
-      if (result?.data?.status) {
-        showFlash(result.data.message, 'success', 'none')
-        navigation.replace("SignIn", {email : route.params.email})
-      } else {
-        showFlash(result.data.message, 'danger', 'none')
-
-      }
-    setisLoading(false)
-
-  }
+ 
 
   return (
     <SafeAreaView style={CommonStyles.container}>
@@ -77,10 +56,10 @@ const SignIn = (props) => {
           {/*  ==============   SECTION 1   =================== */}
           <View style={styles.HeaderContainer}>
             <Heading style={{ fontSize: FS_val(24, 700), marginBottom: 7, letterSpacing: 0, textAlign:"left" }}>
-              {`${lang._23} `}</Heading>
+              {`${lang._32} `}</Heading>
 
             <Text_type1 style={{ textAlign: "left" , }}>
-              {`${lang._22} ${route.params?.email ?? ""}`}</Text_type1>
+              {`${lang._33} ${route.params?.email ?? ""}`}</Text_type1>
           </View>
           {/*  ==============   END   =================== */}
 
@@ -89,19 +68,13 @@ const SignIn = (props) => {
 
 
             <View style={styles.inputContainer}>
-              <Label style={styles.labelStyles}>{lang._15}</Label>
+              <Label style={styles.labelStyles}>{lang._34}</Label>
               <Auth_Input
-                placeholder={lang._16}
-                isPassword={true}
-                onChange={setpassword}
+                placeholder={lang._34}
+                onChange={settoken}
+                
               />
             </View>
-
-            <Text_Button  title={lang._24 + "?"} 
-            textStyles={{fontSize:FS_height(2.4), color:COLORS.Links}}
-            style={{marginLeft : '-40%'}}
-            onpress={() => handleForgot()}
-            />
 
           </View>
           {/*  ==============   END   =================== */}
@@ -112,9 +85,9 @@ const SignIn = (props) => {
         </View>
 
         <View style={styles.absoluteContainer}>
-          <Auth_Button title={lang._29}
-          onpress={() => handlecontinue()}
+          <Auth_Button title={lang._3}
           isLoading={isLoading}
+          onpress={() =>handlecontinue()}
           />
          </View>
 
@@ -164,11 +137,5 @@ const styles = StyleSheet.create({
  
 })
 
-export default SignIn
+export default Verify
 
-
-//Certificate fingerprints:
-// SHA1: 44:9C:30:85:26:14:DD:53:51:EF:93:49:E2:B9:AA:2A:06:85:13:82
-// SHA256: D8:3D:D5:E5:90:63:B3:32:6B:08:DE:01:49:2E:DB:F4:87:43:77:4E:45:49:2E:55:62:CA:4E:76:1E:2C:EF:F8
-// Signature algorithm name: SHA256withRSA
-// Subject Public Key Algorithm: 2048-bit RSA key

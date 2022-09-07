@@ -6,61 +6,100 @@ import { lang } from '../../../assets/languages'
 import { Layout, Heading, Text_type1, Label, CurveHeader } from '../../../components'
 import { Auth_Input, Phone_Input } from '../../../components/Input'
 import { Auth_Button, Social_Button, Text_Button } from '../../../components/Buttons'
+import apiRequest from '../../../Data/remote/Webhandler'
+import { ROUTES } from '../../../Data/remote/Routes'
+import { showFlash } from '../../../utils/MyUtils'
 
 const ForgotPassword = (props) => {
-  const [togglePolicy, settogglePolicy] = useState(false)
-  const [toggleNotification, settoggleNotification] = useState(false)
   const { navigation, route } = props
+  const [newToken, setnewToken] = useState('')
+  const [newPassword, setnewPassword] = useState('')
+  const [isLoading, setisLoading] = useState(false)
 
- 
+  const handlecontinue = async () => {
+    setisLoading(true)
+    if (newPassword != "" && newToken != "") {
+      const result = await apiRequest({
+        method: "post",
+        url: ROUTES.CHANGE_PASSWORD,
+        data: { email: route?.params?.email, newPassword, newToken }
+      }).catch((err) => {
+        console.log('====================================');
+        console.log(err);
+        console.log('====================================');
+        showFlash("Somehomg Went Wrong", "danger", 'auto')
+        setisLoading(false)
+      });
+      if (result?.data?.status) {
+        showFlash(result?.data?.message, 'success', 'none')
+        navigation.replace("SignIn", { email: route?.params?.email })
+      } else {
+        showFlash(result?.data?.message, 'danger', 'none')
+
+      }
+    } else {
+      showFlash("Please Enter your password and OTP!", "warning", "auto")
+    }
+    setisLoading(false)
+
+  }
+
 
   return (
     <SafeAreaView style={CommonStyles.container}>
       <Layout fixed={false}>
-        <View style={{height : height - 60}}>
-        <CurveHeader />
-        <View style={{}}>
+        <View style={{ height: height - 60 }}>
+          <CurveHeader />
+          <View style={{}}>
 
-          {/*  ==============   SECTION 1   =================== */}
-          <View style={styles.HeaderContainer}>
-            <Heading style={{ fontSize: FS_val(24, 700), marginBottom: 7, letterSpacing: 0, textAlign:"left" }}>
-              {`${lang._30} ${props?.route?.params?.name}`}</Heading>
+            {/*  ==============   SECTION 1   =================== */}
+            <View style={styles.HeaderContainer}>
+              <Heading style={{ fontSize: FS_val(24, 700), marginBottom: 7, letterSpacing: 0, textAlign: "left" }}>
+                {`${lang._30}`}</Heading>
 
-            <Text_type1 style={{ textAlign: "left" , }}>
-              {`${lang._22} ${route.params?.email ?? ""}`}</Text_type1>
-          </View>
-          {/*  ==============   END   =================== */}
-
-          {/*  ==============   Section 2   =================== */}
-          <View style={styles.sectionContainer}>
-
-
-            <View style={styles.inputContainer}>
-              <Label style={styles.labelStyles}>{lang._15}</Label>
-              <Auth_Input
-                placeholder={lang._16}
-                isPassword={true}
-              />
+              <Text_type1 style={{ textAlign: "left", }}>
+                {`${lang._35} ${route?.params?.email ?? ""}`}</Text_type1>
             </View>
+            {/*  ==============   END   =================== */}
 
-            <Text_Button  title={lang._24} 
-            textStyles={{fontSize:FS_height(2.4), color:COLORS.Links}}
-            style={{marginLeft : '-40%'}}
-            />
+            {/*  ==============   Section 2   =================== */}
+            <View style={styles.sectionContainer}>
+
+              <View style={styles.inputContainer}>
+                <Label style={styles.labelStyles}>{lang._34}</Label>
+                <Auth_Input
+                  placeholder={lang._34}
+                  onChange={setnewToken}
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Label style={styles.labelStyles}>{lang._36}</Label>
+                <Auth_Input
+                  placeholder={lang._16}
+                  isPassword={true}
+                  onChange={setnewPassword}
+                />
+              </View>
+
+
+
+            </View>
+            {/*  ==============   END   =================== */}
+
+
+
 
           </View>
-          {/*  ==============   END   =================== */}
 
-        
-
+          <View style={styles.absoluteContainer}>
+            <Auth_Button title={lang._29}
+              onpress={() => handlecontinue()}
+              isLoading={isLoading}
+            />
+          </View>
 
         </View>
-
-        <View style={styles.absoluteContainer}>
-          <Auth_Button title={lang._29}/>
-         </View>
-
-         </View>
       </Layout>
     </SafeAreaView>
   )
@@ -73,7 +112,7 @@ const styles = StyleSheet.create({
     width: width,
     paddingHorizontal: '8%',
     paddingVertical: 25,
-    
+
   },
 
   sectionContainer: {
@@ -95,15 +134,15 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.WorkSans_SemiBold
   },
 
-  absoluteContainer :{
+  absoluteContainer: {
     ...CommonStyles._center,
-    paddingVertical :10,
-    position:"absolute",
-    width:width,
-    bottom:0
+    paddingVertical: 10,
+    position: "absolute",
+    width: width,
+    bottom: 0
   }
- 
- 
+
+
 })
 
 export default ForgotPassword

@@ -4,6 +4,7 @@ import PrefManager from '../../Data/Local/PrefManager';
 import { useSelector, useDispatch } from 'react-redux';
 import RootStack from '../../navigation/RootStack';
 import Branding from '../../components/Branding';
+import AuthStack from '../../navigation/AuthStack';
 import { View } from 'react-native';
 import { COLORS } from '../../utils/Common';
 
@@ -26,7 +27,8 @@ const Splash = () => {
       backgroundColor={COLORS.primary}
 
     >
-      <RootStack />
+      {/* <RootStack /> */}
+      <AuthStack/>
     </AnimatedSplash>
   )
 }

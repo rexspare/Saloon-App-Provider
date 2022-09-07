@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import CommonStyles from '../../../assets/styles/CommonStyles'
 import { height, width, COLORS, FS_height, FS_val, FONTS } from '../../../utils/Common'
@@ -7,14 +7,56 @@ import { Layout, Heading, Text_type1, Label, CurveHeader } from '../../../compon
 import { Auth_Input, Phone_Input } from '../../../components/Input'
 import { Auth_Button, Social_Button, Text_Button } from '../../../components/Buttons'
 import CheckBox from '@react-native-community/checkbox';
-
+import { useDispatch } from 'react-redux'
+import { registerUser } from '../../../Data/Local/Store/Actions/AuthActions'
+import { showFlash } from '../../../utils/MyUtils'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SignUp = (props) => {
   const [togglePolicy, settogglePolicy] = useState(true)
-  const [toggleNotification, settoggleNotification] = useState(false)
-  const { navigation, route } = props
+  const { navigation, route, } = props
+  const dispatch = useDispatch()
 
- 
+  const [firstName, setfirstName] = useState('')
+  const [lastName, setlastName] = useState('')
+  const [password, setpassword] = useState('')
+  const [phone, setphone] = useState('')
+  const [isLoading, setisLoading] = useState(false)
+
+  const handlecontinue = async () => {
+    setisLoading(true)
+    if (firstName != '' && lastName != '' && password != '' && phone != '' && togglePolicy) {
+      const result = dispatch(
+        registerUser({
+          email: route.params.email,
+          username: firstName + lastName,
+          phone,
+          role: 'customer',
+          password
+        },
+          () => callBack())
+      );
+      if (result) {
+
+        console.log("result----> ", result)
+
+      }
+
+    } else {
+      if (!togglePolicy) {
+        showFlash("You need to Agree to terms!", 'danger', 'none')
+      } else {
+        showFlash("All Fields are required!", 'danger', 'none')
+      }
+    }
+    setisLoading(false)
+
+  }
+
+  const callBack = () => {
+    navigation.navigate("Verify", { email: route.params.email })
+    AsyncStorage.setItem("@Email", route.params.email)
+  }
 
   return (
     <SafeAreaView style={CommonStyles.container}>
@@ -39,6 +81,7 @@ const SignUp = (props) => {
               <Label style={styles.labelStyles}>{lang._11}</Label>
               <Auth_Input
                 placeholder={lang._12}
+                onChange={setfirstName}
               />
             </View>
 
@@ -46,6 +89,8 @@ const SignUp = (props) => {
               <Label style={styles.labelStyles}>{lang._13}</Label>
               <Auth_Input
                 placeholder={lang._14}
+                onChange={setlastName}
+
               />
             </View>
 
@@ -54,12 +99,16 @@ const SignUp = (props) => {
               <Auth_Input
                 placeholder={lang._16}
                 isPassword={true}
+                onChange={setpassword}
               />
             </View>
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{lang._17}</Label>
-              <Phone_Input />
+              <Phone_Input
+                onChange={setphone}
+
+              />
 
             </View>
           </View>
@@ -74,18 +123,20 @@ const SignUp = (props) => {
                 onValueChange={(newValue) => { settogglePolicy(newValue) }}
                 tintColors={{ true: COLORS.Links, false: "#rf66tt" }}
                 onTintColor="#FF0000"
-                style={{ marginLeft: '5%',  marginRight :'3%'}}
+                style={{ marginLeft: '5%', marginRight: '3%' }}
               />
 
               <Label style={styles.LabelAgree}>{lang._18}
-               <Text onPress={() =>alert("geg")} style={[styles.agreebtn]}>Pricvacy Policy</Text>
-                ,
-                <Text style={[styles.agreebtn]}>Term & Conditions </Text>{" "}and{" "}
-                <Text style={[styles.agreebtn]}>Business Terms </Text>
+                <Text onPress={() => alert("geg")} style={[styles.agreebtn]}>Pricvacy Policy</Text>
+                {" "}and{" "}
+                <Text style={[styles.agreebtn]}>Term & Conditions </Text>
               </Label>
             </View>
 
-            <Auth_Button title={lang._21} onpress={() => {}} />
+            <Auth_Button title={lang._21}
+              onpress={() => handlecontinue()}
+              isLoading={isLoading}
+            />
 
           </View>
 
@@ -136,7 +187,7 @@ const styles = StyleSheet.create({
     fontSize: FS_height(2),
     fontFamily: FONTS.Merriweather_Regular,
     textAlign: "left",
-    width : '70%'
+    width: '70%'
   },
 
   agreebtn: {
