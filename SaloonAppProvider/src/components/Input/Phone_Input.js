@@ -22,7 +22,7 @@ const Phone_Input = (props) => {
                 //     console.log(text);
                 // }}
                 onChangeFormattedText={(text) => {
-                    console.log(text);
+                    props.onChange(text)
                 }}
                 containerStyle={[Styles.mainContainer,Styles.inputContainer]}
                 textContainerStyle={Styles.TextContainer}

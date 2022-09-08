@@ -1,6 +1,5 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthScreen from '../screens/Authentication';
 import SignUp from '../screens/Authentication/SignUp';
 import SignIn from '../screens/Authentication/SignIn';
@@ -14,7 +13,6 @@ const screenOptionStyle = {
 
 const AuthStack = () => {
   return (
-    <NavigationContainer>
       <Stack.Navigator screenOptions={screenOptionStyle}>
         <Stack.Screen name="AuthScreen" component={AuthScreen} />
         <Stack.Screen name="SignUp" component={SignUp} />
@@ -22,7 +20,6 @@ const AuthStack = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name='Verify' component={Verify} />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };
 

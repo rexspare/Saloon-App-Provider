@@ -24,6 +24,9 @@ const SignUp = (props) => {
   const [isLoading, setisLoading] = useState(false)
 
   const handlecontinue = async () => {
+    console.log('====================================');
+    console.log(firstName, lastName, password,phone, togglePolicy);
+    console.log('====================================');
     setisLoading(true)
     if (firstName != '' && lastName != '' && password != '' && phone != '' && togglePolicy) {
       const result = dispatch(
@@ -31,7 +34,7 @@ const SignUp = (props) => {
           email: route.params.email,
           username: firstName + lastName,
           phone,
-          role: 'customer',
+          role: 'vendor',
           password
         },
           () => callBack())

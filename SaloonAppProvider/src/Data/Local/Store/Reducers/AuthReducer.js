@@ -4,6 +4,7 @@ import Types from'../Contants'
 var defaultState = {
     user: {},
     findingUser : true,
+    isUserLoggedIn : false
   };
 
   
@@ -15,6 +16,13 @@ var authReducer = (state = defaultState, action) => {
         newState.user = action.payload;
         return newState;
       }
+
+      case Types.IS_USER_LOGGED_IN: {
+        let newState = Object.assign({}, state);
+        newState.isUserLoggedIn = action.payload;
+        return newState;
+      }
+  
   
       default:
         return state;

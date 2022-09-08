@@ -58,7 +58,6 @@ const SignIn = (props) => {
       });
       if (result?.data?.status) {
         showFlash(result.data.message, 'success', 'none')
-        navigation.replace("SignIn", {email : route.params.email})
       } else {
         showFlash(result.data.message, 'danger', 'none')
 

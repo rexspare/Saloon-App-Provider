@@ -8,7 +8,8 @@ const showFlash = (msg, type, icon, isFloating) => {
         type: type,
         icon:icon,
         floating :true,
-        textStyle:{fontFamily: FONTS.WorkSans_Medium }
+        textStyle:{fontFamily: FONTS.WorkSans_Medium },
+        titleStyle:{fontFamily: FONTS.WorkSans_Medium }
       });
 }
 

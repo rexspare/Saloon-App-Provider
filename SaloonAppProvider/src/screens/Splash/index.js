@@ -27,8 +27,7 @@ const Splash = () => {
       backgroundColor={COLORS.primary}
 
     >
-      {/* <RootStack /> */}
-      <AuthStack/>
+      <RootStack />
     </AnimatedSplash>
   )
 }

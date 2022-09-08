@@ -63,7 +63,7 @@ const AuthScreen = (props) => {
           registerUser({
             email: result.user?.email,
             username: result.user?.name,
-            role: 'customer',
+            role: 'vendor',
             googleID: result.user?.id
           },
             () => { })
