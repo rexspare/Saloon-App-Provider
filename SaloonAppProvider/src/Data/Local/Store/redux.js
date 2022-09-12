@@ -11,7 +11,7 @@ export default function configureStore(initialState) {
   var store = createStore(
     reducer,
     initialState,
-    applyMiddleware(thunk, logger),
+    applyMiddleware(thunk),
   );
 
   return store;

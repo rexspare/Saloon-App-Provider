@@ -18,8 +18,12 @@ export const setIsUserLoggedIn = (data) => async (dispatch) => {
   dispatch({ type: Types.IS_USER_LOGGED_IN, payload: data });
 };
 
+export const setLocation = (data) => async (dispatch) => {
+  dispatch({ type: Types.MY_LOCATION, payload: data });
+};
+
+
 export const registerUser = (data, callBack) => async (dispatch) => {
-  alert(data)
   console.log(data);
   const result = await apiRequest({
     method: "post",
@@ -30,13 +34,31 @@ export const registerUser = (data, callBack) => async (dispatch) => {
     return false;
   });
   if (result.data.status) {
-    showFlash(result.data?.message?.replace("\n",""), 'success', 'none')
-    callBack()
+    console.log(result.data);
+    showFlash(result.data?.message?.replace("\n", ""), 'success', 'none')
+    callBack(result)
     return result.data;
   } else {
-    showFlash(result.data.message?.replace("\n",""), 'danger', 'none')
+    showFlash(result.data.message?.replace("\n", ""), 'danger', 'none')
     return result;
   }
 };
+
+export const getCategories = () => async (dispatch) => {
+  const result = await apiRequest({
+    method: "GET",
+    url: ROUTES.GET_CATEGORIES,
+  }).catch((err) => {
+    showFlash("Network Error", "danger", 'auto',)
+    return false;
+  });
+  if (result.data.status) {
+    dispatch({ type: Types.CATEGORIES, payload: result?.data?.categories });
+    return result.data;
+  } else {
+    return result;
+  }
+
+}
 
 
