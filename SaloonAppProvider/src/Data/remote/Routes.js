@@ -9,7 +9,7 @@ RESET_PASSWORD:"reset-password-user",
 CHANGE_PASSWORD:"set-new-password-user",
 GET_CATEGORIES:"get-categories",
 GET_SERVICES: "get-services",
-VENDOR_PROFILE:"create-vendor-profile",
+CREATE_VENDOR_PROFILE:"create-vendor-profile",
 
 }
 

@@ -16,13 +16,14 @@ const screenOptionStyle = {
 const AuthStack = () => {
   return (
       <Stack.Navigator screenOptions={screenOptionStyle}>
-         <Stack.Screen name='Profile' component={Profile} />
+       
         <Stack.Screen name="AuthScreen" component={AuthScreen} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name='Verify' component={Verify} />
         <Stack.Screen name='Location' component={Location} />
+        <Stack.Screen name='Profile' component={Profile} />
        
       </Stack.Navigator>
   );

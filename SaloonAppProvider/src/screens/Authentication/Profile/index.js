@@ -45,13 +45,14 @@ const Profile = props => {
   const [vendorCategories, setVendorCategories] = useState('')
   const [isOpenTimeModalVisible, setOpenTimeModalVisible] = useState(false);
   const [isCloseTimeModalVisible, setCloseTimeModalVisible] = useState(false);
+  const [currentVendorLocation, setCurrentVendorLocation] = useState('')
   const [selectedItem, setSelectedItem] = useState([])
+  const [secondarySelectedItem, setSecondarySelectedItem] = useState([])
 
 
   useEffect(() => {
     setLocationPermission()
     getCat();
-
 
   }, [])
 
@@ -72,21 +73,67 @@ const Profile = props => {
     else {
       showFlash("Some Error Occured", "danger", 'none')
     }
-
-
-
   }
 
-  const handleOnPress = (item) => {
-    if (selectedItem.includes(item.category_name)) {
-      const newList = selectedItem.filter(catName => catName !== item.category_name)
-      return setSelectedItem(newList)
+  const handleOnPress = (item, checkClickedCategory) => {
+
+    var itemSelected = checkClickedCategory == 'Primary' ? selectedItem : secondarySelectedItem
+    var setItemSelected = checkClickedCategory == 'Primary' ? setSelectedItem : setSecondarySelectedItem
+
+    if (itemSelected.includes(item.category_name)) {
+      const newList = itemSelected.filter(catName => catName !== item.category_name)
+      return setItemSelected(newList)
     }
-    setSelectedItem([...selectedItem, item.category_name])
+    setItemSelected([...itemSelected, item.category_name])
   }
 
-  const getSelectedItem = item => selectedItem.includes(item.category_name)
+  const getSelectedItem = (item,checkClickedCategory) => {
+    
+    var itemSelected = checkClickedCategory == 'Primary' ? selectedItem : secondarySelectedItem
+    return itemSelected.includes(item.category_name)
+    
+  }
 
+  const handlecontinue = async () => {
+    setisLoading(true)
+    if (business != '' && businessWebsite != '' && businessOpenTime != null 
+         && businessCloseTime != null && selectedItem != [] && secondarySelectedItem!= [] ) 
+         {
+        const result = await apiRequest({
+        method: "post",
+        url: ROUTES.CREATE_VENDOR_PROFILE,
+
+        data: {
+          business_name :business, 
+          business_open_time :businessOpenTime, 
+          business_close_time:businessCloseTime, 
+          business_website: businessWebsite,
+
+          //TODO: Replace Lat, Long, UserID
+          business_lat: '-25.527670', 
+          business_long:'152.695200', 
+          primary_category: selectedItem, 
+          secondary_category: secondarySelectedItem,
+          user_id:71
+           }
+
+      }).catch((err) => {
+        showFlash("Somehomg Went Wrong", "danger", 'auto')
+        setisLoading(false)
+      });
+      if (result?.data?.status) {
+        showFlash(result.data.message, 'success', 'none')
+        navigation.navigate('verify')
+      } else {
+        showFlash(result.data.message, 'danger', 'none')
+
+      }
+    } else {
+        showFlash("Please enter all required data", "warning", "auto")
+    }
+    setisLoading(false)
+
+  }
 
   const setLocationPermission = () => {
     let mediaPer =
@@ -131,7 +178,7 @@ const Profile = props => {
 
 
 
-        {console.log("=======================>  ", selectedItem)}
+        {console.log("=======================> PRIMARY ", selectedItem)}
 
         <MyDateTimePicker
           isModalVisible={isOpenTimeModalVisible}
@@ -245,14 +292,16 @@ const Profile = props => {
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{lang._49}</Label>
-
+              {console.log("=======================> SECONDARY ", secondarySelectedItem)}
               <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false} >
                 <View style={{ flexDirection: 'row' }} >
                   {
                     vendorCategories?.categories?.map((categories, index) => {
                       return (
-                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories) ? '#679f58' : COLORS.pure_Black }]} key={index} onPress={() => handleOnPress(categories)} >
+                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories,'Primary') ? '#679f58' : COLORS.pure_Black }]} 
+                        key={index} 
+                        onPress={() => handleOnPress(categories, 'Primary')} >
 
                           <Text_type1
                             style={{ alignSelf: 'center', fontSize: 14 }}
@@ -277,12 +326,25 @@ const Profile = props => {
               <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false} >
                 <View style={{ flexDirection: 'row' }} >
-                  {
-                  
+                {
+                    vendorCategories?.categories?.map((categories, index) => {
+                      return (
+                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories,'Secondary') ? '#679f58' : COLORS.pure_Black }]} 
+                        key={index} 
+                        onPress={() => handleOnPress(categories , 'Secondary')} >
+
+                          <Text_type1
+                            style={{ alignSelf: 'center', fontSize: 14 }}
+                            color={COLORS.pure_White}>
+                            {categories?.category_name}
+                          </Text_type1>
+
+                       
+                        </TouchableOpacity>
 
 
-                      
-                    
+                      )
+                    })
                   }
                 </View>
               </ScrollView>
@@ -363,7 +425,7 @@ const styles = StyleSheet.create({
     width: 155,
     height: 48,
     borderRadius: 30,
-    marginStart: 5,
+    marginEnd: 5,
     justifyContent: 'center',
     alignItems: 'center'
   }
