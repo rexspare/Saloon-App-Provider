@@ -19,6 +19,7 @@ const SignIn = (props) => {
   const [password, setpassword] = useState("")
   const [isLoading, setisLoading] = useState(false)
 
+  
   const handlecontinue = async () => {
     setisLoading(true)
     if (password != "") {
@@ -31,13 +32,14 @@ const SignIn = (props) => {
         setisLoading(false)
       });
       if (result?.data?.status) {
+        console.log(result.data);
         showFlash(result.data.message, 'success', 'none')
-        dispatch(setUser({email : route.params.email}))
+        dispatch(setUser(result?.data?.userData))
+        AsyncStorage.setItem(storage_keys.USER_DATA_KEY, JSON.stringify(result?.data?.userData))
         dispatch(setIsUserLoggedIn(true))
         AsyncStorage.removeItem("@Email")
       } else {
         showFlash(result.data.message, 'danger', 'none')
-
       }
     } else {
         showFlash("Please Enter your password!", "warning", "auto")
@@ -58,6 +60,7 @@ const SignIn = (props) => {
       });
       if (result?.data?.status) {
         showFlash(result.data.message, 'success', 'none')
+        navigation.replace("SignIn", {email : route.params.email})
       } else {
         showFlash(result.data.message, 'danger', 'none')
 
@@ -65,7 +68,6 @@ const SignIn = (props) => {
     setisLoading(false)
 
   }
-
   return (
     <SafeAreaView style={CommonStyles.container}>
       <Layout fixed={false}>

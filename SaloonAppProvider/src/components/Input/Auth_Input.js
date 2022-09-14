@@ -73,6 +73,7 @@ const Styles = StyleSheet.create({
         fontFamily: FONTS.WorkSans_Medium,
         fontSize: FS_val(14.5, 700),
         paddingHorizontal: 10,
+    
     },
     iconContainer: {
         width: '15%',

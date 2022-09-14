@@ -34,9 +34,12 @@ import { PERMISSIONS, checkMultiple, requestMultiple } from 'react-native-permis
 import { ROUTES } from '../../../Data/remote/Routes'
 import apiRequest from '../../../Data/remote/Webhandler'
 import { showFlash } from '../../../utils/MyUtils'
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsUserLoggedIn } from '../../../Data/Local/Store/Actions';
 
 const Profile = props => {
   const { navigation, route } = props;
+  const user = useSelector((state) => state.authReducer.user)
   const [business, setBusinessName] = useState('');
   const [businessWebsite, setBusinessWebsite] = useState('');
   const [businessOpenTime, setBusinessOpenTime] = useState(null)
@@ -48,7 +51,9 @@ const Profile = props => {
   const [currentVendorLocation, setCurrentVendorLocation] = useState('')
   const [selectedItem, setSelectedItem] = useState([])
   const [secondarySelectedItem, setSecondarySelectedItem] = useState([])
+  const [Coords, setCoords] = useState({})
 
+const dispatch = useDispatch()
 
   useEffect(() => {
     setLocationPermission()
@@ -67,11 +72,9 @@ const Profile = props => {
       return false;
     });
     if (result.data.status) {
-      showFlash("Categories Fetched", "success", 'none')
       setVendorCategories(result.data)
     }
     else {
-      showFlash("Some Error Occured", "danger", 'none')
     }
   }
 
@@ -87,35 +90,35 @@ const Profile = props => {
     setItemSelected([...itemSelected, item.category_name])
   }
 
-  const getSelectedItem = (item,checkClickedCategory) => {
-    
+  const getSelectedItem = (item, checkClickedCategory) => {
+
     var itemSelected = checkClickedCategory == 'Primary' ? selectedItem : secondarySelectedItem
     return itemSelected.includes(item.category_name)
-    
+
   }
 
   const handlecontinue = async () => {
+    let primaryCat = selectedItem.join();
+    let secondaryCat = secondarySelectedItem.join()
     setisLoading(true)
-    if (business != '' && businessWebsite != '' && businessOpenTime != null 
-         && businessCloseTime != null && selectedItem != [] && secondarySelectedItem!= [] ) 
-         {
-        const result = await apiRequest({
+    if (business != '' && businessWebsite != '' && businessOpenTime != null
+      && businessCloseTime != null && selectedItem.length != 0 && Coords?.lat) {
+      const result = await apiRequest({
         method: "post",
         url: ROUTES.CREATE_VENDOR_PROFILE,
 
         data: {
-          business_name :business, 
-          business_open_time :businessOpenTime, 
-          business_close_time:businessCloseTime, 
+          business_name: business,
+          business_open_time: moment(businessOpenTime).format('H:mm'),
+          business_close_time: moment(businessCloseTime).format('H:mm'),
           business_website: businessWebsite,
 
-          //TODO: Replace Lat, Long, UserID
-          business_lat: '-25.527670', 
-          business_long:'152.695200', 
-          primary_category: selectedItem, 
-          secondary_category: secondarySelectedItem,
-          user_id:71
-           }
+          business_lat: Coords.lat,
+          business_long: Coords.long,
+          primary_category: primaryCat,
+          secondary_category: secondaryCat,
+          user_id: user.id
+        }
 
       }).catch((err) => {
         showFlash("Somehomg Went Wrong", "danger", 'auto')
@@ -123,13 +126,13 @@ const Profile = props => {
       });
       if (result?.data?.status) {
         showFlash(result.data.message, 'success', 'none')
-        navigation.navigate('verify')
+        dispatch(setIsUserLoggedIn(true))
       } else {
         showFlash(result.data.message, 'danger', 'none')
 
       }
     } else {
-        showFlash("Please enter all required data", "warning", "auto")
+      showFlash("Please enter all required data", "warning", "auto")
     }
     setisLoading(false)
 
@@ -150,11 +153,10 @@ const Profile = props => {
 
           requestMultiple(mediaPer).then(statuses => {
             if (statuses[mediaPer] == 'granted') {
-            
-            } else {
-            
-            }
 
+            } else {
+
+            }
 
           });
         }
@@ -176,14 +178,10 @@ const Profile = props => {
           />
         )}
 
-
-
-        {console.log("=======================> PRIMARY ", selectedItem)}
-
         <MyDateTimePicker
           isModalVisible={isOpenTimeModalVisible}
           modalCallback={() => setOpenTimeModalVisible(false)}
-          onDateSelected={(date) => setBusinessOpenTime(date)}
+          onDateSelected={(date) => console.log(new Date(date).getTime())}
         />
 
 
@@ -225,9 +223,9 @@ const Profile = props => {
                 <TouchableOpacity onPress={() => setOpenTimeModalVisible(true)} style={{ justifyContent: 'center' }}>
                   <Text_type1
                     style={{ alignSelf: 'center' }}
-                  
+
                     color={COLORS.subtle}>
-                    {businessOpenTime ? moment(businessOpenTime).format('H:mm A') : lang._43}
+                    {businessOpenTime ? moment(businessOpenTime).format('H:mm') : lang._43}
                   </Text_type1>
                 </TouchableOpacity>
               </View>
@@ -249,9 +247,9 @@ const Profile = props => {
                   style={{ justifyContent: 'center' }}>
                   <Text_type1
                     style={{ alignSelf: 'center' }}
-                   
+
                     color={COLORS.subtle}>
-                    {businessCloseTime ? moment(businessCloseTime).format('H:mm A') : lang._43}
+                    {businessCloseTime ? moment(businessCloseTime).format('H:mm') : lang._43}
                   </Text_type1>
                 </TouchableOpacity>
               </View>
@@ -278,13 +276,13 @@ const Profile = props => {
                   },
                 ]}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Location')}
+                  onPress={() => navigation.navigate('Location', { setCoords: setCoords })}
                   style={{ justifyContent: 'center' }}>
                   <Text_type1
                     style={{ alignSelf: 'center' }}
-                  
+
                     color={COLORS.subtle}>
-                    {`${lang._43}`}
+                    {Coords?.address ? Coords?.address : `${lang._43}`}
                   </Text_type1>
                 </TouchableOpacity>
               </View>
@@ -292,16 +290,15 @@ const Profile = props => {
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{lang._49}</Label>
-              {console.log("=======================> SECONDARY ", secondarySelectedItem)}
               <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false} >
                 <View style={{ flexDirection: 'row' }} >
                   {
                     vendorCategories?.categories?.map((categories, index) => {
                       return (
-                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories,'Primary') ? '#679f58' : COLORS.pure_Black }]} 
-                        key={index} 
-                        onPress={() => handleOnPress(categories, 'Primary')} >
+                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories, 'Primary') ? '#679f58' : COLORS.pure_Black }]}
+                          key={index}
+                          onPress={() => handleOnPress(categories, 'Primary')} >
 
                           <Text_type1
                             style={{ alignSelf: 'center', fontSize: 14 }}
@@ -309,7 +306,7 @@ const Profile = props => {
                             {categories?.category_name}
                           </Text_type1>
 
-                       
+
                         </TouchableOpacity>
 
 
@@ -326,12 +323,12 @@ const Profile = props => {
               <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false} >
                 <View style={{ flexDirection: 'row' }} >
-                {
+                  {
                     vendorCategories?.categories?.map((categories, index) => {
                       return (
-                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories,'Secondary') ? '#679f58' : COLORS.pure_Black }]} 
-                        key={index} 
-                        onPress={() => handleOnPress(categories , 'Secondary')} >
+                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories, 'Secondary') ? '#679f58' : COLORS.pure_Black }]}
+                          key={index}
+                          onPress={() => handleOnPress(categories, 'Secondary')} >
 
                           <Text_type1
                             style={{ alignSelf: 'center', fontSize: 14 }}
@@ -339,7 +336,7 @@ const Profile = props => {
                             {categories?.category_name}
                           </Text_type1>
 
-                       
+
                         </TouchableOpacity>
 
 

@@ -5,6 +5,7 @@ import { StatusBar } from 'react-native';
 import { COLORS } from '../utils/Common';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
+import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const screenOptionStyle = {
@@ -12,14 +13,19 @@ const screenOptionStyle = {
 };
 
 export default function RootStack() {
+  const isUserLoggedIn = useSelector((state) =>state.authReducer.isUserLoggedIn)
 
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content"
         backgroundColor={COLORS.secondary} />
       <Stack.Navigator screenOptions={screenOptionStyle}>
-        <Stack.Screen name="AuthStack" component={AuthStack} />
+        {isUserLoggedIn ?
         <Stack.Screen name="AppStack" component={AppStack} />
+        : 
+        <Stack.Screen name="AuthStack" component={AuthStack} />
+      }
+        
 
       </Stack.Navigator>
 

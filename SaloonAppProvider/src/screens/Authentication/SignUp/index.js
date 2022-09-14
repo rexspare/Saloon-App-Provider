@@ -24,9 +24,6 @@ const SignUp = (props) => {
   const [isLoading, setisLoading] = useState(false)
 
   const handlecontinue = async () => {
-    console.log('====================================');
-    console.log(firstName, lastName, password,phone, togglePolicy);
-    console.log('====================================');
     setisLoading(true)
     if (firstName != '' && lastName != '' && password != '' && phone != '' && togglePolicy) {
       const result = dispatch(
@@ -39,10 +36,10 @@ const SignUp = (props) => {
         },
           () => callBack())
       );
-      
+
       if (result) {
 
-        console.log("result----> ", result)
+        // console.log("result----> ", result)
 
       }
 
@@ -58,8 +55,9 @@ const SignUp = (props) => {
   }
 
   const callBack = () => {
-     navigation.navigate("Profile", { email: route.params.email })
-    AsyncStorage.setItem("@Email", route.params.email)
+    navigation.navigate("Verify", { email: route.params.email })
+    AsyncStorage.setItem("@Email", route.params.email),
+      AsyncStorage.setItem("@Login", JSON.stringify({ password, email: route.params.email }))
   }
 
   return (
