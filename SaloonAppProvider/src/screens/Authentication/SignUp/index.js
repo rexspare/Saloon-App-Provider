@@ -39,6 +39,7 @@ const SignUp = (props) => {
         },
           () => callBack())
       );
+      
       if (result) {
 
         console.log("result----> ", result)
@@ -57,7 +58,7 @@ const SignUp = (props) => {
   }
 
   const callBack = () => {
-    navigation.navigate("Verify", { email: route.params.email })
+     navigation.navigate("Profile", { email: route.params.email })
     AsyncStorage.setItem("@Email", route.params.email)
   }
 

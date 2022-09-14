@@ -22,13 +22,17 @@ const Auth_Input = (props) => {
                     </TouchableOpacity>
                 </If>
                 <TextInput
-                    style={[Styles.inputStyle, { color: COLORS.secondary , paddingLeft : Icon ? 0 : 10}]}
+                    style={[Styles.inputStyle, { color: COLORS.subtle , paddingLeft : Icon ? 0 : 10, fontFamily:FONTS.WorkSans_SemiBold}]}
                     secureTextEntry={props.isPassword ? isSecureTextEntry : false}
                     placeholder={props.placeholder}
                     value={props?.value}
+                    
                     placeholderTextColor={COLORS.subtle}
                     onChangeText={props.onChange}
                     editable={props.editable}
+                    
+                    
+
                 />
                 <If condition={props.isPassword}>
                     <TouchableOpacity style={[Styles.iconContainer]}

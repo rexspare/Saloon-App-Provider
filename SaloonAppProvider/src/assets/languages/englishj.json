@@ -34,5 +34,23 @@
     "_33": "We've sent a OTP to your Email ",
     "_34":"OTP",
     "_35":"Enter Your New Password and OTP sent to",
-    "_36":"New Password"
+    "_36":"New Password",
+
+    "":"-------------------------------------------------------------------------------   PROFILE",
+
+    "_37":"Create your profile",
+    "_38":"You are almost there! Complete your profile and let's move forward!",
+    "_39":"Enter business name",
+    "_40":"Enter your business name",
+    "_41":"Business open time",
+    "_42":"Business close time",
+    "_43":"Select from here",
+    "_44":"Business website",
+    "_45":"Paste your website URL",
+    "_46":"Business location",
+    "_47":"Create profile",
+    "_48":"Pick a time",
+    "_49":"Primary category",
+    "_50":"Secondary category"
+
 }
