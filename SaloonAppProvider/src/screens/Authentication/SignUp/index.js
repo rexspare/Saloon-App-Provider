@@ -39,6 +39,7 @@ const SignUp = (props) => {
         },
           () => callBack())
       );
+      
       if (result) {
 
         console.log("result----> ", result)

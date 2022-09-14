@@ -5,8 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import CommonStyles from '../../../assets/styles/CommonStyles';
 import {
   height,
@@ -16,7 +17,7 @@ import {
   FS_val,
   FONTS,
 } from '../../../utils/Common';
-import {lang} from '../../../assets/languages';
+import { lang } from '../../../assets/languages';
 import {
   Layout,
   Heading,
@@ -24,56 +25,97 @@ import {
   Label,
   CurveHeader,
 } from '../../../components';
-import {Auth_Input} from '../../../components/Input';
-import {Auth_Button} from '../../../components/Buttons';
+import { Auth_Input } from '../../../components/Input';
+import { Auth_Button } from '../../../components/Buttons';
 import MyDateTimePicker from '../../../components/MyDateTimePicker';
 import moment from 'moment'
 import { PERMISSIONS, checkMultiple, requestMultiple } from 'react-native-permissions';
+// import { ROUTES } from "../../../remote/Routes";
+import { ROUTES } from '../../../Data/remote/Routes'
+import apiRequest from '../../../Data/remote/Webhandler'
+import { showFlash } from '../../../utils/MyUtils'
 
 const Profile = props => {
-  const {navigation, route} = props;
-
+  const { navigation, route } = props;
   const [business, setBusinessName] = useState('');
   const [businessWebsite, setBusinessWebsite] = useState('');
-  const [businessOpenTime, setBusinessOpenTime] =  useState(null)
+  const [businessOpenTime, setBusinessOpenTime] = useState(null)
   const [businessCloseTime, setBusinessCloseTime] = useState(null);
   const [isLoading, setisLoading] = useState(false);
+  const [vendorCategories, setVendorCategories] = useState('')
   const [isOpenTimeModalVisible, setOpenTimeModalVisible] = useState(false);
   const [isCloseTimeModalVisible, setCloseTimeModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState([])
 
 
   useEffect(() => {
     setLocationPermission()
+    getCat();
+
+
   }, [])
 
-  const setLocationPermission = ()=> {
+  const getCat = async () => {
+
+
+    const result = await apiRequest({
+      method: "GET",
+      url: ROUTES.GET_CATEGORIES,
+    }).catch((err) => {
+      showFlash("Network Error", "danger", 'auto',)
+      return false;
+    });
+    if (result.data.status) {
+      showFlash("Categories Fetched", "success", 'none')
+      setVendorCategories(result.data)
+    }
+    else {
+      showFlash("Some Error Occured", "danger", 'none')
+    }
+
+
+
+  }
+
+  const handleOnPress = (item) => {
+    if (selectedItem.includes(item.category_name)) {
+      const newList = selectedItem.filter(catName => catName !== item.category_name)
+      return setSelectedItem(newList)
+    }
+    setSelectedItem([...selectedItem, item.category_name])
+  }
+
+  const getSelectedItem = item => selectedItem.includes(item.category_name)
+
+
+  const setLocationPermission = () => {
     let mediaPer =
-        Platform.OS == 'android'
-            ? [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION]
-            : Platform.OS == 'ios' ? [PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.PHOTO_LIBRARY] : null;
+      Platform.OS == 'android'
+        ? [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION]
+        : Platform.OS == 'ios' ? [PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.PHOTO_LIBRARY] : null;
 
     checkMultiple(mediaPer)
-        .then(statuses => {
+      .then(statuses => {
+        if (statuses[mediaPer] == 'granted') {
+          console.log('Granted')
+
+        } else {
+
+          requestMultiple(mediaPer).then(statuses => {
             if (statuses[mediaPer] == 'granted') {
-              console.log('Granted')
-                
+            
             } else {
-
-                requestMultiple(mediaPer).then(statuses => {
-                    if (statuses[mediaPer] == 'granted') {
-                        console.log('---------------> Permissions Granted')
-                    } else {
-                        console.log('---------------> Rejected');
-                    }
-
-
-                });
+            
             }
-        })
-        .catch(error => {
-            console.log(JSON.stringify(error));
-        });
-}
+
+
+          });
+        }
+      })
+      .catch(error => {
+        console.log(JSON.stringify(error));
+      });
+  }
 
   return (
     <SafeAreaView style={CommonStyles.container}>
@@ -87,16 +129,16 @@ const Profile = props => {
           />
         )}
 
-    
 
 
+        {console.log("=======================>  ", selectedItem)}
 
-          <MyDateTimePicker
-          isModalVisible = {isOpenTimeModalVisible}
-            modalCallback={() => setOpenTimeModalVisible(false)}
-            onDateSelected={(date) => setBusinessOpenTime(date)}
-          />
-       
+        <MyDateTimePicker
+          isModalVisible={isOpenTimeModalVisible}
+          modalCallback={() => setOpenTimeModalVisible(false)}
+          onDateSelected={(date) => setBusinessOpenTime(date)}
+        />
+
 
         <View style={{}}>
           {/*  ==============   SECTION 1   =================== */}
@@ -110,7 +152,7 @@ const Profile = props => {
               {'' + lang._37}
             </Heading>
 
-            <Text_type1 style={{textAlign: 'left'}}>{`${lang._38}`}</Text_type1>
+            <Text_type1 style={{ textAlign: 'left' }}>{`${lang._38}`}</Text_type1>
           </View>
           {/*  ==============   END   =================== */}
 
@@ -133,11 +175,11 @@ const Profile = props => {
                     borderColor: props.isInvalid ? '#ff0000' : COLORS.subtle,
                   },
                 ]}>
-                <TouchableOpacity  onPress={() => setOpenTimeModalVisible(true)} style={{justifyContent: 'center'} }>
-                <Text_type1
-                    style={{alignSelf: 'center'}}
-                    bold={true}
-                    color={COLORS.pure_Black}>
+                <TouchableOpacity onPress={() => setOpenTimeModalVisible(true)} style={{ justifyContent: 'center' }}>
+                  <Text_type1
+                    style={{ alignSelf: 'center' }}
+                  
+                    color={COLORS.subtle}>
                     {businessOpenTime ? moment(businessOpenTime).format('H:mm A') : lang._43}
                   </Text_type1>
                 </TouchableOpacity>
@@ -157,11 +199,11 @@ const Profile = props => {
                 ]}>
                 <TouchableOpacity
                   onPress={() => setCloseTimeModalVisible(true)}
-                  style={{justifyContent: 'center'}}>
+                  style={{ justifyContent: 'center' }}>
                   <Text_type1
-                    style={{alignSelf: 'center'}}
-                    bold={true}
-                    color={COLORS.pure_Black}>
+                    style={{ alignSelf: 'center' }}
+                   
+                    color={COLORS.subtle}>
                     {businessCloseTime ? moment(businessCloseTime).format('H:mm A') : lang._43}
                   </Text_type1>
                 </TouchableOpacity>
@@ -190,16 +232,62 @@ const Profile = props => {
                 ]}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Location')}
-                  style={{justifyContent: 'center'}}>
+                  style={{ justifyContent: 'center' }}>
                   <Text_type1
-                    style={{alignSelf: 'center'}}
-                    bold={true}
-                    color={COLORS.pure_Black}>
+                    style={{ alignSelf: 'center' }}
+                  
+                    color={COLORS.subtle}>
                     {`${lang._43}`}
                   </Text_type1>
                 </TouchableOpacity>
               </View>
             </View>
+
+            <View style={styles.inputContainer}>
+              <Label style={styles.labelStyles}>{lang._49}</Label>
+
+              <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false} >
+                <View style={{ flexDirection: 'row' }} >
+                  {
+                    vendorCategories?.categories?.map((categories, index) => {
+                      return (
+                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories) ? '#679f58' : COLORS.pure_Black }]} key={index} onPress={() => handleOnPress(categories)} >
+
+                          <Text_type1
+                            style={{ alignSelf: 'center', fontSize: 14 }}
+                            color={COLORS.pure_White}>
+                            {categories?.category_name}
+                          </Text_type1>
+
+                       
+                        </TouchableOpacity>
+
+
+                      )
+                    })
+                  }
+                </View>
+              </ScrollView>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Label style={styles.labelStyles}>{lang._50}</Label>
+
+              <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false} >
+                <View style={{ flexDirection: 'row' }} >
+                  {
+                  
+
+
+                      
+                    
+                  }
+                </View>
+              </ScrollView>
+            </View>
+
           </View>
 
           {/*  ==============   END   =================== */}
@@ -271,6 +359,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 10,
   },
+  catBg: {
+    width: 155,
+    height: 48,
+    borderRadius: 30,
+    marginStart: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
 export default Profile;

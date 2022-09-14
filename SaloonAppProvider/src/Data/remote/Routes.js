@@ -10,6 +10,7 @@ CHANGE_PASSWORD:"set-new-password-user",
 GET_CATEGORIES:"get-categories",
 GET_SERVICES: "get-services",
 VENDOR_PROFILE:"create-vendor-profile",
+
 }
 
 export {
