@@ -48,7 +48,6 @@ const Profile = props => {
   const [vendorCategories, setVendorCategories] = useState('')
   const [isOpenTimeModalVisible, setOpenTimeModalVisible] = useState(false);
   const [isCloseTimeModalVisible, setCloseTimeModalVisible] = useState(false);
-  const [currentVendorLocation, setCurrentVendorLocation] = useState('')
   const [selectedItem, setSelectedItem] = useState([])
   const [secondarySelectedItem, setSecondarySelectedItem] = useState([])
   const [Coords, setCoords] = useState({})
@@ -181,7 +180,7 @@ const dispatch = useDispatch()
         <MyDateTimePicker
           isModalVisible={isOpenTimeModalVisible}
           modalCallback={() => setOpenTimeModalVisible(false)}
-          onDateSelected={(date) => console.log(new Date(date).getTime())}
+          onDateSelected={(date) => setBusinessOpenTime(date)}
         />
 
 

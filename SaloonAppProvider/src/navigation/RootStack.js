@@ -20,11 +20,11 @@ export default function RootStack() {
       <StatusBar barStyle="light-content"
         backgroundColor={COLORS.secondary} />
       <Stack.Navigator screenOptions={screenOptionStyle}>
-        {isUserLoggedIn ?
+        {/* {isUserLoggedIn ? */}
         <Stack.Screen name="AppStack" component={AppStack} />
-        : 
+        {/* :  */}
         <Stack.Screen name="AuthStack" component={AuthStack} />
-      }
+      {/* } */}
         
 
       </Stack.Navigator>
