@@ -6,13 +6,14 @@ import { setIsUserLoggedIn } from '../../Data/Local/Store/Actions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { storage_keys } from '../../utils/StorageKeys'
 import CommonStyles from '../../assets/styles/CommonStyles'
-import { Heading } from '../../components'
-import { COLORS, FS_val, height, width, } from '../../utils/Common'
+import { DiscoverItem, DiscoverItem_2, Heading, Label, Layout } from '../../components';
+import { COLORS, FS_val, height, width, FS_height, FONTS } from '../../utils/Common'
 import { lang } from '../../assets/languages'
-import Text_type1 from '../../components'
-import FIcons from 'react-native-vector-icons/Feather'
 
-export default function Profile() {
+import FIcons from 'react-native-vector-icons/Feather'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+export default function Profile(props) {
   const dispatch = useDispatch()
 
   const handleLogout = () => {
@@ -25,43 +26,73 @@ export default function Profile() {
 
   return (
     <SafeAreaView style={CommonStyles.container} >
-      
-<View style={{flexDirection:'row'}}>
-      <TouchableOpacity
+
+
+      <View style={{ flex: 1 }}>
+
+
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 50 }}>
+          <TouchableOpacity
+          >
+            <Image
               style={{
-                overflow: 'hidden',
                 height: 100,
                 width: 100,
-                borderRadius: 50,
-                backgroundColor:'red'
-              }}>
-              <Image
-                style={{
-                  height: 100,
-                  width: 100,
-                  borderRadius: 50,
-                  backgroundColor: 'rgba(0,0,0,0.3)',
-                }}
-                source = {require("../../assets/images/user.png")}
-              />
+                borderRadius: 15,
 
-            </TouchableOpacity>
+                backgroundColor: 'rgba(0,0,0,0.8)',
+              }}
+              source={require("../../assets/images/user.png")}
+            />
 
-            <TouchableOpacity
-              style={{ marginLeft: -30, padding: 5, justifyContent: "flex-end" }}
-            >
-              <View style={{ backgroundColor: 'white', borderRadius: 150 / 2, borderColor: '#ccc', borderWidth: .5 }}>
-                <FIcons name="edit-2" style={styles.imageselector} size={15} color={COLORS.pure_Black} />
-              </View>
-            </TouchableOpacity>
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            style={{ marginLeft: -30, padding: 5, justifyContent: "flex-end" }}
+          >
+            <View style={{ backgroundColor: 'white', borderRadius: 150 / 2, borderColor: '#ccc', borderWidth: 2 }}>
+              <FIcons name="upload" style={styles.imageselector} size={13} color={COLORS.pure_Black} />
             </View>
+          </TouchableOpacity>
 
-      <Auth_Button
-        title={"logout"}
-        onpress={() => handleLogout()}
-      />
-      
+        </View>
+
+
+
+        <TouchableOpacity style={{ flexDirection: 'row', marginHorizontal: 20, alignItems:'center' ,marginTop: 50, flexWrap: 'wrap'}}
+        onPress={()=> props.navigation.navigate('Appointment') }>
+
+            <Label style={styles._label}>Services</Label>
+            <Ionicons name="ios-chevron-forward-outline" style={{ position: 'absolute', right: 0 }} size={20} color={COLORS.pure_Black} />
+            
+        </TouchableOpacity>
+
+        <View style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 2, marginHorizontal:20, marginVertical: 15}} />
+
+        <TouchableOpacity style={{ flexDirection: 'row', marginHorizontal: 20, alignItems:'center' , flexWrap: 'wrap'}}>
+
+            <Label style={styles._label}>Settings</Label>
+            <Ionicons name="ios-chevron-forward-outline" style={{ position: 'absolute', right: 0 }} size={20} color={COLORS.pure_Black} />
+            
+        </TouchableOpacity>
+
+        <View style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 2, marginHorizontal:20, marginVertical: 15}} />
+
+        <TouchableOpacity style={{ flexDirection: 'row', marginHorizontal: 20, alignItems:'center' , flexWrap: 'wrap'}}
+        onPress={()=> handleLogout() }>
+
+            <Label style={styles._label}>Logout</Label>
+            <Ionicons name="ios-chevron-forward-outline" style={{ position: 'absolute', right: 0 }} size={20} color={COLORS.pure_Black} />
+            
+        </TouchableOpacity>
+       
+
+  
+
+      </View>
+
+
+
     </SafeAreaView>
   )
 }
@@ -74,7 +105,17 @@ const styles = StyleSheet.create({
     ...CommonStyles._center,
   },
   imageselector: {
-    padding: 10,
+    padding: 8,
     elevation: 6
   },
+  sectionContainer: {
+
+
+    ...CommonStyles._center,
+  },
+  _label: {
+    fontFamily: FONTS.WorkSans_Medium,
+    fontSize: FS_height(2.7),
+   
+  }
 })
