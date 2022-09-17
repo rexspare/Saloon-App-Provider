@@ -22,16 +22,16 @@ const Auth_Input = (props) => {
                     </TouchableOpacity>
                 </If>
                 <TextInput
-                    style={[Styles.inputStyle, { color: COLORS.subtle , paddingLeft : Icon ? 0 : 10, fontFamily:FONTS.WorkSans_SemiBold}]}
+                    style={[Styles.inputStyle, { color: COLORS.subtle, paddingLeft: Icon ? 0 : 10, fontFamily: FONTS.WorkSans_SemiBold }]}
                     secureTextEntry={props.isPassword ? isSecureTextEntry : false}
                     placeholder={props.placeholder}
                     value={props?.value}
-                    
+
                     placeholderTextColor={COLORS.subtle}
                     onChangeText={props.onChange}
                     editable={props.editable}
-                    
-                    
+
+
 
                 />
                 <If condition={props.isPassword}>
@@ -51,7 +51,7 @@ Auth_Input.defaultProps = {
     onChange: () => { },
     isPassword: false,
     isInvalid: false,
-    editable : true
+    editable: true
 }
 
 const Styles = StyleSheet.create({
@@ -73,7 +73,7 @@ const Styles = StyleSheet.create({
         fontFamily: FONTS.WorkSans_Medium,
         fontSize: FS_val(14.5, 700),
         paddingHorizontal: 10,
-    
+        color: COLORS.secondary
     },
     iconContainer: {
         width: '15%',

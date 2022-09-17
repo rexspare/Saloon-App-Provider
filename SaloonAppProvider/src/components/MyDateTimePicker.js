@@ -16,7 +16,6 @@ const MyDatePicker = (props)=> {
        
         modalCallback();
        
-       
         onDateSelected && onDateSelected(date)
     }
 
