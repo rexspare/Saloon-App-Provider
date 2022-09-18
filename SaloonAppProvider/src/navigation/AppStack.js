@@ -7,6 +7,7 @@ import Home from '../screens/Home'
 import Appointment from '../screens/Appointment';
 import Profile from '../screens/Profile';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AddServices from '../screens/AddServices';
 
 
 const Tab = createBottomTabNavigator();
@@ -19,6 +20,7 @@ export default function AppStack() {
       animation: "slide_from_right"
     }}>
       <Stack.Screen name='App' component={TabStack} />
+      <Stack.Screen name='AddServices' component={AddServices} />
       {/* ADD YOURSCREEN HERE */}
     </Stack.Navigator>
 

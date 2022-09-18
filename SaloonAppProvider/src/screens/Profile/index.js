@@ -60,7 +60,7 @@ export default function Profile(props) {
 
 
         <TouchableOpacity style={{ flexDirection: 'row', marginHorizontal: 20, alignItems:'center' ,marginTop: 50, flexWrap: 'wrap'}}
-        onPress={()=> props.navigation.navigate('Appointment') }>
+        onPress={()=> props.navigation.navigate('AddServices') }>
 
             <Label style={styles._label}>Services</Label>
             <Ionicons name="ios-chevron-forward-outline" style={{ position: 'absolute', right: 0 }} size={20} color={COLORS.pure_Black} />

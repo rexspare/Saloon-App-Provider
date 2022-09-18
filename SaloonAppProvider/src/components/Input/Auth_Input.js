@@ -26,7 +26,7 @@ const Auth_Input = (props) => {
                     secureTextEntry={props.isPassword ? isSecureTextEntry : false}
                     placeholder={props.placeholder}
                     value={props?.value}
-
+                    keyboardType= {props.numericKeyboard ? 'numeric' : 'default' }
                     placeholderTextColor={COLORS.subtle}
                     onChangeText={props.onChange}
                     editable={props.editable}
