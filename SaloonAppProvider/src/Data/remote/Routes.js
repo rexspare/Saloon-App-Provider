@@ -11,7 +11,8 @@ GET_CATEGORIES:"get-categories",
 GET_SERVICES: "get-services",
 CREATE_VENDOR_PROFILE:"create-vendor-profile",
 GET_VENDOR_SELECTED_CATEGORIES:"get-user-categories",
-ADD_VENDOR_SERVICE:"add-service"
+ADD_VENDOR_SERVICE:"add-service",
+GET_BOOKING_HISTORY:"get-booking-history"
 
 }
 

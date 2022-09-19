@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } fr
 import React, { useState, useEffect } from 'react';
 import { ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { showFlash } from '../../utils/MyUtils'
 import CommonStyles from '../../assets/styles/CommonStyles';
 import { CurveHeader, Heading, Label, Text_type1, Layout } from '../../components';
