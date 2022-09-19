@@ -28,14 +28,14 @@ export default function AppointmentsItemRender(props) {
 
                             <Text_type1
                                 style={{ textAlign: "left" }}
-                                color={'green'}>
+                                color={COLORS.subtle}>
                                 {'Name: '}
                             </Text_type1>
 
                             <Text_type1
                                 style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
 
-                                color={COLORS.subtle}>
+                                color={COLORS.pure_Black}>
                                 {`${name}`}
                             </Text_type1>
                         </View>
@@ -45,14 +45,14 @@ export default function AppointmentsItemRender(props) {
                             <Text_type1
                                 style={{ textAlign: "left" }}
 
-                                color={'green'}>
+                                color={COLORS.subtle}>
                                 {'Phone: '}
                             </Text_type1>
 
                             <Text_type1
                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
 
-                                color={COLORS.subtle}>
+                                color={COLORS.pure_Black}>
                                 {`${phone}`}
                             </Text_type1>
                         </View>
@@ -60,14 +60,14 @@ export default function AppointmentsItemRender(props) {
                         <View style={{ flexDirection: 'row' }}>
                             <Text_type1
                                 style={{ textAlign: "left" }}
-                                color={'green'}>
+                                color={COLORS.subtle}>
                                 {'Title: '}
                             </Text_type1>
 
                             <Text_type1
                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium, marginEnd: 30 }}
 
-                                color={COLORS.subtle}>
+                                color={COLORS.pure_Black}>
                                 {`${title}`}
                             </Text_type1>
                         </View>
@@ -76,14 +76,14 @@ export default function AppointmentsItemRender(props) {
                             <Text_type1
                                 style={{ textAlign: "left" }}
 
-                                color={'green'}>
+                                color={COLORS.subtle}>
                                 {'Time: '}
                             </Text_type1>
 
                             <Text_type1
                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
 
-                                color={COLORS.subtle}>
+                                color={COLORS.pure_Black}>
                                 {`${time}`}
                             </Text_type1>
                         </View>
@@ -92,14 +92,14 @@ export default function AppointmentsItemRender(props) {
                             <Text_type1
                                 style={{ textAlign: "left" }}
 
-                                color={'green'}>
+                                color={COLORS.subtle}>
                                 {'Start time: '}
                             </Text_type1>
 
                             <Text_type1
                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
 
-                                color={COLORS.subtle}>
+                                color={COLORS.pure_Black}>
                                 {`${start_time}`}
                             </Text_type1>
                         </View>
@@ -108,14 +108,14 @@ export default function AppointmentsItemRender(props) {
                             <Text_type1
                                 style={{ textAlign: "left" }}
 
-                                color={'green'}>
+                                color={COLORS.subtle}>
                                 {'End time: '}
                             </Text_type1>
 
                             <Text_type1
                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
 
-                                color={COLORS.subtle}>
+                                color={COLORS.pure_Black}>
                                 {`${end_time}`}
                             </Text_type1>
                         </View>
@@ -124,14 +124,14 @@ export default function AppointmentsItemRender(props) {
                             <Text_type1
                                 style={{ textAlign: "left" }}
 
-                                color={'green'}>
+                                color={COLORS.subtle}>
                                 {'Price: '}
                             </Text_type1>
 
                             <Text_type1
                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
 
-                                color={COLORS.subtle}>
+                                color={COLORS.pure_Black}>
                                 {`${price}`}
                             </Text_type1>
                         </View>
