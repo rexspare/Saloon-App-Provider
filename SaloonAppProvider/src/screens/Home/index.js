@@ -16,6 +16,19 @@ const Data = [
   { _id: 4, name: "Tattoo & Peircing", image: "https://picsum.photos/200/300" },
 ]
 
+const myEvents = [
+  {
+    id: 1,
+    description: 'Massage Booking',
+    startDate: new Date(2021, 3, 15, 1, 0),
+    endDate: new Date(2021, 3, 15, 1, 30),
+    color: 'lightblue',
+    style: { }
+    // ... more properties if needed,
+  },
+  // More events...
+];
+
 const Home = () => {
   return (
     <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
@@ -26,15 +39,17 @@ const Home = () => {
           <View style={styles._circle}></View>
           <Heading style={styles._heading} >Bookings</Heading>
           <Label style={styles._lable}>Your bookings today</Label>
-          <Auth_Input
-            styles={styles._input}
-            placeholder={lang._28}
-            Icon={<Feather name="search" size={24} color={COLORS.subtle} />}
-          />
+         
         </View>
         {/* End */}
 
-
+        <WeekView
+          events={myEvents}
+          selectedDate={new Date(2021, 3, 15)}
+          numberOfDays={1}
+          fixedHorizontally={true}
+   
+        />
 
       </Layout>
     </SafeAreaView>

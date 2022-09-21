@@ -28,7 +28,7 @@ const SignIn = (props) => {
       const result = await apiRequest({
         method: "post",
         url: ROUTES.LOGIN,
-        data: { email: route.params.email, password }
+        data: { email: route.params.email, password, role: 'vendor' }
       }).catch((err) => {
         showFlash("Somehomg Went Wrong", "danger", 'auto')
         setisLoading(false)
