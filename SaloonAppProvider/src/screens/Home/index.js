@@ -6,6 +6,7 @@ import commonStyles from '../../assets/styles/CommonStyles';
 import { COLORS, FONTS, FS_height, height, width } from '../../utils/Common';
 import { lang } from '../../assets/languages'
 import Auth_Input from '../../components/Input/Auth_Input';
+import WeekView from 'react-native-week-view';
 
 
 const Data = [
@@ -23,8 +24,8 @@ const Home = () => {
         {/* HEADER SECTION */}
         <View style={styles.sectiionHeader}>
           <View style={styles._circle}></View>
-          <Heading style={styles._heading} >{lang._25}</Heading>
-          <Label style={styles._lable}>{lang._26}</Label>
+          <Heading style={styles._heading} >Bookings</Heading>
+          <Label style={styles._lable}>Your bookings today</Label>
           <Auth_Input
             styles={styles._input}
             placeholder={lang._28}
@@ -33,28 +34,6 @@ const Home = () => {
         </View>
         {/* End */}
 
-        <View>
-          <Heading style={styles._header}>{lang._27}</Heading>
-
-          <FlatList
-            data={Data}
-            numColumns={2}
-            columnWrapperStyle={{ justifyContent: "space-evenly", marginTop: 10 }}
-            renderItem={({ item }) => <DiscoverItem item={item} />}
-          />
-        </View>
-
-        <View style={{ marginTop: 20 }}>
-          <Heading style={styles._header}>{lang._27}</Heading>
-
-          <FlatList
-            data={Data}
-            horizontal
-            style={{ marginLeft: '3%' }}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => <DiscoverItem_2 item={item} />}
-          />
-        </View>
 
 
       </Layout>
