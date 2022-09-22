@@ -11,6 +11,26 @@ import apiRequest from '../../Data/remote/Webhandler'
 import { showFlash } from '../../utils/MyUtils'
 import moment from 'moment'
 
+const myEvents = [
+   
+  {
+    id: 2,
+    description: 'Shinner',
+    startDate: new Date('2022-10-22T06:39:26.112Z'),  
+    endDate: new Date('2022-10-22T07:39:26.112Z'),
+    color: COLORS.success,
+    
+  },
+  {
+    id: 3,
+    description: 'Cutting',
+    startDate: new Date(2022, 9, 22, 1, 40),
+    endDate: new Date(2022, 9, 22, 2, 30),
+    color: COLORS.success,
+    
+  }
+
+];
 
 const Home = () => {
  
@@ -20,28 +40,9 @@ const Home = () => {
  
 
 
-  const myEvents = [
-   
-    {
-      id: 2,
-      description: 'Shinner',
-      startDate: new Date('2022-09-22 12:10:00'),  
-      endDate: new Date('2022-09-22 12:10:00'),
-      color: COLORS.success,
-      
-    },
-    {
-      id: 3,
-      description: 'Cutting',
-      startDate: new Date(2022, 9, 22, 1, 40),
-      endDate: new Date(2022, 9, 22, 2, 30),
-      color: COLORS.success,
-      
-    }
 
-  ];
   useEffect(() => {
-
+console.log(new Date('2022-09-22T13:39:26.112Z').toISOString(),"=-=-")
     getTodaysBooking();
 
   }, [])
@@ -84,7 +85,7 @@ const Home = () => {
     <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
       <Layout fixed={false}>
 
-        {console.log("myEventsObj ==== ", myEvents )}
+        {console.log("myEventsObj ==== ", JSON.stringify(myEvents) )}
         
         
 
