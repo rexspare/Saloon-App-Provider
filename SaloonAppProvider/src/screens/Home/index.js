@@ -1,7 +1,6 @@
-import { View, Text, SafeAreaView, StyleSheet, FlatList, Alert } from 'react-native'
+import { View, SafeAreaView, StyleSheet} from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
-import Feather from 'react-native-vector-icons/Feather';
-import { DiscoverItem, DiscoverItem_2, Heading, Label, Layout } from '../../components';
+import { Heading, Label, Layout } from '../../components';
 import commonStyles from '../../assets/styles/CommonStyles';
 import { COLORS, FONTS, FS_height, height, width } from '../../utils/Common';
 import { lang } from '../../assets/languages'
@@ -98,15 +97,15 @@ const Home = () => {
         <View style={{flex:1, marginTop:-90}} >
         <WeekView
           events={myEvents}
-          selectedDate={new Date(2022, 9, 22, 1, 40)}
+          selectedDate={new Date(2022, 9, 22)}
           numberOfDays={1}
-          fixedHorizontally={true}
+          fixedHorizontally={false}
           headerStyle={styles.header}
           locale='en'
           hoursInDisplay={12}
           timeStep={60}
           showNowLine
-          startHour={15}
+
           gridColumnStyle={styles.gridColumn}
           gridRowStyle={styles.gridRow}
           eventContainerStyle={styles.eventContainer}
