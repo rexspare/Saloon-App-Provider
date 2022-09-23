@@ -1,50 +1,27 @@
-import { View, SafeAreaView, StyleSheet} from 'react-native'
-import React, { useState, useEffect, useRef } from 'react'
-import { Heading, Label, Layout } from '../../components';
+import { View, SafeAreaView, StyleSheet, ScrollView, Modal, TouchableOpacity, Text } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { CurveHeader, Heading, Label, Layout, Text_type1 } from '../../components';
 import commonStyles from '../../assets/styles/CommonStyles';
 import { COLORS, FONTS, FS_height, height, width } from '../../utils/Common';
-import { lang } from '../../assets/languages'
 import WeekView from 'react-native-week-view';
 import { useSelector } from 'react-redux';
 import { ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
 import { showFlash } from '../../utils/MyUtils'
-import moment from 'moment'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-const myEvents = [
-   
-  {
-    id: 2,
-    description: 'Shinner',
-    startDate: new Date('2022-10-22T06:39:26.112Z'),  
-    endDate: new Date('2022-10-22T07:39:26.112Z'),
-    color: COLORS.success,
-    
-  },
-  {
-    id: 3,
-    description: 'Cutting',
-    startDate: new Date(2022, 9, 22, 1, 40),
-    endDate: new Date(2022, 9, 22, 2, 30),
-    color: COLORS.success,
-    
-  }
 
-];
 
 const Home = () => {
- 
+
   const user = useSelector((state) => state.authReducer.user)
   const [todaysBooking, setTodaysBooking] = useState([])
-  const weekViewRef = useRef()
- 
-
+  const [modalVisible, setModalVisible] = useState(false)
+  const [customerDetails, setCustomerDetails] = useState('')
 
 
   useEffect(() => {
-console.log(new Date('2022-09-22T13:39:26.112Z').toISOString(),"=-=-")
     getTodaysBooking();
-
   }, [])
 
   const getTodaysBooking = async () => {
@@ -60,8 +37,7 @@ console.log(new Date('2022-09-22T13:39:26.112Z').toISOString(),"=-=-")
     if (result.data.status) {
       setTodaysBooking(result.data.data)
       showFlash("Todays booking's fetched", "success", 'auto')
-   
-     
+      console.log("D--------> ", result.data)
     }
     else {
       console.log(result.data)
@@ -70,59 +46,153 @@ console.log(new Date('2022-09-22T13:39:26.112Z').toISOString(),"=-=-")
 
   const updatedObjectArray = todaysBooking.map((obj) => (
     {
-      id: obj.id,
-     description: obj.username,
-     startDate: new Date(obj.start_time),
-     endDate: new Date(obj.end_time),
-     color: 'blue'
-   }
- ))
+      id: obj.booking_id,
+      name: obj.username,
+      startDate: new Date(obj.isoStartTime),
+      endDate: new Date(obj.isoEndTime),
+      color: COLORS.success,
+      phone: obj.phone,
+      title: obj.service_title,
+      price: obj.service_price,
+      
 
+    }
+  ))
 
-
+  const toggleModal = (visible) => {
+    setModalVisible(visible)
+  }
 
   return (
     <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
-      <Layout fixed={false}>
 
-        {console.log("myEventsObj ==== ", JSON.stringify(myEvents) )}
-        
-        
 
-        <View style={styles.sectiionHeader}>
-          <Heading style={styles._heading} >Bookings</Heading>
-          <Label style={styles._lable}>Your bookings today!</Label>
+      <View style={styles.sectiionHeader}>
+        <Heading style={styles._heading} >Bookings</Heading>
+        <Label style={styles._lable}>Your bookings today!</Label>
 
+      </View>
+
+
+      <Modal
+        transparent={true}
+        animationType={'fade'}
+        animationIn="fadeIn"
+        animationOut="fadeOut"
+        animationInTiming={150}
+        animationOutTiming={150}
+        hasBackdrop={false}
+        hideModalContentWhileAnimating={true}
+        backdropColor={'transparent'}
+        visible={modalVisible}
+      >
+
+        <View style={styles.container}>
+
+          <View style={styles.View}>
+
+
+            <View >
+
+
+              <Text_type1
+                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Bold, fontSize: 18 }}
+                color={COLORS.subtle}>
+                {'Name: '}
+              </Text_type1>
+
+              <Text_type1
+                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_SemiBold, fontSize: 19, color: COLORS.success }}
+
+                color={COLORS.pure_Black}>
+                {customerDetails.name}`
+              </Text_type1>
+
+              <Text_type1
+                style={{ textAlign: "left", textAlign: "left", fontFamily: FONTS.WorkSans_ExtraBold, fontSize: 19 }}
+                color={COLORS.subtle}>
+                {'Phone: '}
+              </Text_type1>
+
+              <Text_type1
+                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_SemiBold, fontSize: 18, color: COLORS.success }}
+
+                color={COLORS.pure_Black}>
+                {`${customerDetails.phone}`}
+              </Text_type1>
+
+
+              <Text_type1
+                style={{ textAlign: "left", textAlign: "left", fontFamily: FONTS.WorkSans_ExtraBold, fontSize: 19 }}
+                color={COLORS.subtle}>
+                {'Title: '}
+              </Text_type1>
+
+              <Text_type1
+                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_SemiBold, fontSize: 18, color: COLORS.success }}
+
+                color={COLORS.pure_Black}>
+                {`${customerDetails.title}`}
+              </Text_type1>
+
+              <Text_type1
+                style={{ textAlign: "left", textAlign: "left", fontFamily: FONTS.WorkSans_ExtraBold, fontSize: 19 }}
+                color={COLORS.subtle}>
+                {'Price: '}
+              </Text_type1>
+
+              <Text_type1
+                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_SemiBold, fontSize: 18, color: COLORS.success }}
+
+                color={COLORS.pure_Black}>
+                {`${customerDetails.price}`}
+              </Text_type1>
+
+            </View>
+
+            <TouchableOpacity onPress={() =>
+              toggleModal(!modalVisible)
+            }>
+                <Ionicons name="close-circle" style={{  alignSelf:'center' }} size={50} color='red' />
+            </TouchableOpacity>
+
+          </View>
         </View>
+      </Modal>
 
-        <View style={{flex:1, marginTop:-90}} >
-        <WeekView
-          events={myEvents}
-          selectedDate={new Date(2022, 9, 22)}
-          numberOfDays={1}
-          fixedHorizontally={false}
-          headerStyle={styles.header}
-          locale='en'
-          hoursInDisplay={12}
-          timeStep={60}
-          showNowLine
 
-          gridColumnStyle={styles.gridColumn}
-          gridRowStyle={styles.gridRow}
-          eventContainerStyle={styles.eventContainer}
-          onEventPress={(e)=> {
-           console.log("CLICKEEEEEDDDD ")
-          }}
-          hourTextStyle={styles.hourText}
-          timesColumnWidth={0.2}
-          
-        
-          headerTextStyle={styles.headerText}
+      <ScrollView style={{ flex: 1, marginTop: -90 }}
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        alwaysBounceHorizontal={false}
+        alwaysBounceVertical={false}>
+        <View >
 
-        
-        />
+          <WeekView
+            events={updatedObjectArray}
+            selectedDate={new Date()}
+            numberOfDays={1}
+            fixedHorizontally={false}
+            headerStyle={styles.header}
+            locale='en'
+            hoursInDisplay={12}
+            timeStep={60}
+            showNowLine
+            nowLineColor='red'
+            gridColumnStyle={styles.gridColumn}
+            gridRowStyle={styles.gridRow}
+            eventContainerStyle={styles.eventContainer}
+            onEventPress={(e) => { toggleModal(!modalVisible), setCustomerDetails(e) }}
+            hourTextStyle={styles.hourText}
+            timesColumnWidth={0.2}
+            headerTextStyle={styles.headerText}
+
+
+          />
         </View>
-      </Layout>
+      </ScrollView>
+
+
     </SafeAreaView>
   )
 }
@@ -136,12 +206,13 @@ const styles = StyleSheet.create({
   },
   _circle: {
     position: 'absolute',
-    backgroundColor: COLORS.accent,
+    backgroundColor: 'rgba(0, 163, 110, 0.1)',
     width: width,
     height: width,
     borderRadius: width,
     bottom: width / 15,
-    right: width / 3.3
+    right: width / 3.3,
+    overflow: 'hidden'
   },
   _heading: {
     fontSize: FS_height(4.5),
@@ -166,7 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.pure_Black,
     borderColor: '#fff',
     height: 75,
-    borderRadius: 20
+    borderRadius: 20,
   },
   headerText: {
     color: 'white',
@@ -176,7 +247,7 @@ const styles = StyleSheet.create({
   },
   hourText: {
     color: COLORS.success,
-    fontSize: 17,
+    fontSize: 18,
     fontFamily: FONTS.WorkSans_SemiBold
   },
 
@@ -188,12 +259,31 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderColor: COLORS.subtle,
   },
-   eventContainer: {
-   borderRadius: 7,
-   justifyContent:'center',
-   alignItems:'center',
-   marginHorizontal: 2,
-   
+  eventContainer: {
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 5,
+    borderColor:COLORS.pure_White,
+    borderWidth: 0.5,
+    maxWidth: 40
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+
+  },
+  View: {
+    backgroundColor: COLORS.pure_White,
+    width: '75%',
+    height: '45%',
+    borderRadius: 45,
+    padding: 17,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    paddingHorizontal: 25
   },
 
 })
