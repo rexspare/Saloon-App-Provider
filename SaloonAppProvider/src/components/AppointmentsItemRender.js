@@ -150,7 +150,7 @@ export default function AppointmentsItemRender(props) {
 
                             <Auth_Button
                                 title={'Accept'}
-                                style={{ backgroundColor: 'green', width: 130 }}
+                                style={{ backgroundColor: COLORS.success, width: 130 }}
                             onpress={() => updateOrder('accepteted', booking_id)}
                            
 

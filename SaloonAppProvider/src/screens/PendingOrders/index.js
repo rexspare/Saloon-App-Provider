@@ -34,7 +34,7 @@ export default function PendingOrders() {
     });
     if (result.data.message) {
 
-      showFlash("Pending Orders Fetched", "success", 'auto')
+     
       setAllPendingOrders(result.data.data);
       console.log("PendingOrders ========> ", result.data.data)
 

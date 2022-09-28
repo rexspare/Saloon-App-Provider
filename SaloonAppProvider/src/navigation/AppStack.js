@@ -5,9 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { COLORS } from '../utils/Common';
 import Home from '../screens/Home'
 import Appointment from '../screens/Appointment';
-import Profile from '../screens/Profile';
+import ProfileMain from '../screens/Profile'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AddServices from '../screens/AddServices';
+import ViewProfile from '../screens/Profile/ViewProfile';
+import Setting from '../screens/Setting';
 
 
 const Tab = createBottomTabNavigator();
@@ -21,6 +24,9 @@ export default function AppStack() {
     }}>
       <Stack.Screen name='App' component={TabStack} />
       <Stack.Screen name='AddServices' component={AddServices} />
+      <Stack.Screen name='ViewProfile' component={ViewProfile} />
+      <Stack.Screen name='Setting' component={Setting} />
+
       {/* ADD YOURSCREEN HERE */}
     </Stack.Navigator>
 
@@ -61,8 +67,8 @@ const TabStack = () => {
           tabBarIcon: ({ size, focused, color }) => {
             return (
               <Ionicons
-                name={focused ? "ios-compass" : 'ios-compass-outline'}
-                size={35}
+                name={focused ? "calendar" : 'calendar'}
+                size={30}
                 color={COLORS.secondary} />
             )
           }
@@ -71,20 +77,20 @@ const TabStack = () => {
         options={{
           tabBarIcon: ({ size, focused, color }) => {
             return (
-              <Ionicons
-                name={focused ? "ios-calendar" : 'ios-calendar-outline'}
+              <MaterialIcons
+                name={focused ? "filter-list-alt" : 'filter-list-alt'}
                 size={30}
                 color={COLORS.secondary} />
             )
           }
         }} />
-      <Tab.Screen name="Profile" component={Profile}
+      <Tab.Screen name="ProfileMain" component={ProfileMain}
         options={{
           tabBarIcon: ({ size, focused, color }) => {
             return (
               <Ionicons
-                name={focused ? "person" : 'person-outline'}
-                size={30}
+                name={focused ? "md-person-circle-sharp" : 'md-person-circle-sharp'}
+                size={33}
                 color={COLORS.secondary} />
             )
           }

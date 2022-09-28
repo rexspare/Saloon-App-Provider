@@ -44,7 +44,6 @@ export default function AddServices(props) {
     });
     if (result.data.status) {
       setVendorCategories(result.data)
-      showFlash("Categories Fetched", "success", 'auto')
       console.log("DATA FETCHED ====>  ", result.data)
     }
     else {

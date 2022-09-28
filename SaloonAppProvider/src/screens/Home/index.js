@@ -36,7 +36,7 @@ const Home = () => {
     });
     if (result.data.status) {
       setTodaysBooking(result.data.data)
-      showFlash("Todays booking's fetched", "success", 'auto')
+      // showFlash("Todays booking's fetched", "success", 'auto')
       console.log("D--------> ", result.data)
     }
     else {
@@ -54,7 +54,7 @@ const Home = () => {
       phone: obj.phone,
       title: obj.service_title,
       price: obj.service_price,
-      
+
 
     }
   ))
@@ -153,7 +153,7 @@ const Home = () => {
             <TouchableOpacity onPress={() =>
               toggleModal(!modalVisible)
             }>
-                <Ionicons name="close-circle" style={{  alignSelf:'center' }} size={50} color='red' />
+              <Ionicons name="close-circle" style={{ alignSelf: 'center' }} size={50} color='red' />
             </TouchableOpacity>
 
           </View>
@@ -191,6 +191,16 @@ const Home = () => {
           />
         </View>
       </ScrollView>
+
+      <View style={{ position: "absolute", bottom: 20, end: 20 }}>
+        <TouchableOpacity
+          style={styles.add_appointment}
+       
+        >
+          <Ionicons name='add-outline' color={COLORS.pure_White} size={30} />
+
+        </TouchableOpacity>
+      </View>
 
 
     </SafeAreaView>
@@ -264,7 +274,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 5,
-    borderColor:COLORS.pure_White,
+    borderColor: COLORS.pure_White,
     borderWidth: 0.5,
     maxWidth: 40
   },
@@ -285,6 +295,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 25
   },
+  add_appointment:{
+  
+      width: 60,
+      height: 60,
+      borderRadius: 35,
+      backgroundColor: COLORS.success,
+      marginHorizontal: 5,
+      justifyContent: 'center',
+      alignItems: 'center'
+  
+  }
 
 })
 

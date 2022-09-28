@@ -34,7 +34,6 @@ export default function CancelledOrders() {
       });
       if (result.data.message) {
         
-        showFlash("Cancelled Orders Fetched", "success", 'auto')
         setAllPendingOrders(result.data.data);
         console.log("PendingOrders ========> ", result.data.data)
        
