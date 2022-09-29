@@ -47,10 +47,11 @@ const MyDatePicker = (props)=> {
                         </View>
                         <DatePicker
                             date={Dateobj}
-                            mode='time'
+                            mode={props.datetime ? 'datetime' : 'time'}
                             is24hourSource="locale"
                             onDateChange={(date) => setDateobj(date)}
                             androidVariant="nativeAndroid"
+                            
                         />
                         <View style={{ flexDirection: "row", alignContent: "center", marginHorizontal: 10, padding: 10 }}>
                             <TouchableOpacity style={styles.modalBtn} activeOpacity={0.7} onPress={() =>  { modalCallback()} }>

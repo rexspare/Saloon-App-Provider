@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 
 
 
-const Home = () => {
+const Home = (props) => {
 
   const user = useSelector((state) => state.authReducer.user)
   const [todaysBooking, setTodaysBooking] = useState([])
@@ -194,6 +194,7 @@ const Home = () => {
 
       <View style={{ position: "absolute", bottom: 20, end: 20 }}>
         <TouchableOpacity
+        onPress={()=>  props.navigation.navigate("AddUserBookings")}
           style={styles.add_appointment}
        
         >

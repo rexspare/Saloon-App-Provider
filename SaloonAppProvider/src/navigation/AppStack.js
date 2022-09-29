@@ -11,6 +11,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AddServices from '../screens/AddServices';
 import ViewProfile from '../screens/Profile/ViewProfile';
 import Setting from '../screens/Setting';
+import AddUserBookings from '../screens/AddUserBookings';
 
 
 const Tab = createBottomTabNavigator();
@@ -26,6 +27,7 @@ export default function AppStack() {
       <Stack.Screen name='AddServices' component={AddServices} />
       <Stack.Screen name='ViewProfile' component={ViewProfile} />
       <Stack.Screen name='Setting' component={Setting} />
+      <Stack.Screen name='AddUserBookings' component={AddUserBookings} />
 
       {/* ADD YOURSCREEN HERE */}
     </Stack.Navigator>
