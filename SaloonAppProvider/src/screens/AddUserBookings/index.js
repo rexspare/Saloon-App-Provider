@@ -91,7 +91,7 @@ export default function AddUserBookings(props) {
         if (businessOpenTime != '' && businessCloseTime != '' && selectedItem.length == 1) {
             const result = await apiRequest({
                 method: "post",
-                url: ROUTES.ADD_VENDOR_SERVICE,
+                url: ROUTES.USER_BOOKINGS,
                 data: {
                     customer_id: user.id,
                     vendor_id: user.id,
