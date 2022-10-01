@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet,  View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import { ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
@@ -7,7 +7,7 @@ import { showFlash } from '../../utils/MyUtils'
 import CommonStyles from '../../assets/styles/CommonStyles';
 import { CurveHeader, Heading, Label, Text_type1, Layout } from '../../components';
 import RadioBox from '../../components/RadioBox'
-import { height, width, COLORS, FS_height, FS_val, FONTS } from '../../utils/Common';
+import { width, COLORS, FS_height, FS_val, FONTS } from '../../utils/Common';
 import { Auth_Input } from '../../components/Input';
 import { Auth_Button } from '../../components/Buttons';
 
@@ -75,18 +75,6 @@ export default function AddServices(props) {
 
   const handlecontinue = async () => {
     
-    data= {
-      user_id: user.id,
-      service_title: serviceTitle,
-      service_description: serviceDescription,
-      service_for: gender,
-      service_price: servicePrice,
-      category_id: selectedItem.join(),
-      service_time: serviceDuration,
-
-  }
-  console.log("Add Service Data ========> ", JSON.stringify(data))
-
     setisLoading(true)
     if (serviceTitle != '' && serviceDescription != '' && gender !='' &&
       servicePrice != '' && serviceDuration != '' && selectedItem.length == 1) {

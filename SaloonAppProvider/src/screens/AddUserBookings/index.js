@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import { ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
@@ -6,9 +6,8 @@ import { useSelector } from 'react-redux';
 import { showFlash } from '../../utils/MyUtils'
 import CommonStyles from '../../assets/styles/CommonStyles';
 import { CurveHeader, Heading, Label, Text_type1, Layout } from '../../components';
-import { height, width, COLORS, FS_height, FS_val, FONTS } from '../../utils/Common';
+import { width, COLORS, FS_height, FS_val, FONTS } from '../../utils/Common';
 import { lang } from '../../assets/languages';
-import { Auth_Input } from '../../components/Input';
 import { Auth_Button } from '../../components/Buttons';
 import MyDateTimePicker from '../../components/MyDateTimePicker';
 import moment from 'moment'
