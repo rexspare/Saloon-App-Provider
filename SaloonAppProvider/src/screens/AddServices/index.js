@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux';
 import { showFlash } from '../../utils/MyUtils'
 import CommonStyles from '../../assets/styles/CommonStyles';
 import { CurveHeader, Heading, Label, Text_type1, Layout } from '../../components';
+import RadioBox from '../../components/RadioBox'
 import { height, width, COLORS, FS_height, FS_val, FONTS } from '../../utils/Common';
-import { lang } from '../../assets/languages';
 import { Auth_Input } from '../../components/Input';
 import { Auth_Button } from '../../components/Buttons';
-import { Picker } from '@react-native-picker/picker';
 
 export default function AddServices(props) {
 
@@ -19,6 +18,8 @@ export default function AddServices(props) {
   const [serviceTitle, setServiceTitle] = useState('')
   const [serviceDescription, setServiceDescription] = useState('')
   const [gender, setGender] = useState('')
+  const [male, setMale] = useState(false);
+  const [female, setFemale] = useState(false);
   const [servicePrice, setServicePrice] = useState('')
   const [serviceDuration, setServiceDuration] = useState('')
   const [selectedItem, setSelectedItem] = useState([])
@@ -73,11 +74,22 @@ export default function AddServices(props) {
   }
 
   const handlecontinue = async () => {
-    console.log("Finally --> ", selectedItem)
+    
+    data= {
+      user_id: user.id,
+      service_title: serviceTitle,
+      service_description: serviceDescription,
+      service_for: gender,
+      service_price: servicePrice,
+      category_id: selectedItem.join(),
+      service_time: serviceDuration,
+
+  }
+  console.log("Add Service Data ========> ", JSON.stringify(data))
 
     setisLoading(true)
-    if (serviceTitle != '' && serviceDescription != '' && gender != ''
-      && servicePrice != '' && serviceDuration != '' && selectedItem.length == 1) {
+    if (serviceTitle != '' && serviceDescription != '' && gender !='' &&
+      servicePrice != '' && serviceDuration != '' && selectedItem.length == 1) {
       const result = await apiRequest({
         method: "post",
         url: ROUTES.ADD_VENDOR_SERVICE,
@@ -159,15 +171,33 @@ export default function AddServices(props) {
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>Select gender</Label>
+              <View style={{ alignSelf: 'center', marginHorizontal: 12 }}>
 
-              <Auth_Input
-                placeholder={'Enter service description'}
-                onChange={setGender}
-              />
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <RadioBox
+                  
+                    onPress={() => {setMale(true), setFemale(false), setGender('Male')}}
+                    title={'Male'}
+                    isChecked={male}
+
+                  />
+
+                  <RadioBox
+                    onPress={() => {setFemale(true), setMale(false), setGender('Female')}}
+                    title={'Female'}
+                    isChecked={female}
+
+                  />
+                </View>
+
+
+              </View>
             </View>
 
             <View style={styles.inputContainer}>
-              <Label style={styles.labelStyles}>Select price</Label>
+              <Label style={styles.labelStyles}>Enter price</Label>
 
               <Auth_Input
                 placeholder={'Enter service price'}
@@ -177,10 +207,10 @@ export default function AddServices(props) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Label style={styles.labelStyles}>Select duration</Label>
+              <Label style={styles.labelStyles}>Enter duration</Label>
 
               <Auth_Input
-                placeholder={'Enter service duration'}
+                placeholder={'Enter service duration i.e H:MM'}
                 numericKeyboard={true}
                 onChange={setServiceDuration}
               />

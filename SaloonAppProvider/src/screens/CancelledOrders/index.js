@@ -5,8 +5,9 @@ import apiRequest from '../../Data/remote/Webhandler'
 import { useSelector } from 'react-redux';
 import { showFlash } from '../../utils/MyUtils'
 import { useFocusEffect } from '@react-navigation/native';
-import { COLORS } from '../../utils/Common';
 import AppointmentsItemRender from '../../components/AppointmentsItemRender';
+import { Label } from '../../components';
+import { width, FS_height, FONTS, COLORS } from '../../utils/Common';
 
 export default function CancelledOrders() {
 
@@ -51,9 +52,9 @@ export default function CancelledOrders() {
     <FlatList
      showsVerticalScrollIndicator={false}
      data={allPendingOrders}
-     contentContainerStyle={{justifyContent: 'center', paddingBottom:10 }}
+     contentContainerStyle={{   flexGrow: 1,justifyContent: 'center', paddingBottom:10 }}
      keyExtractor={(item, index) => index.toString()}
-     ListEmptyComponent={<ActivityIndicator size="large" color={COLORS.pure_Black} style={{marginTop: 20}} />}
+     ListEmptyComponent={<Label style={styles.labelStyles}>No Cancelled Appointments</Label>}
      renderItem={({ item }) => 
 
     <AppointmentsItemRender
@@ -75,4 +76,16 @@ export default function CancelledOrders() {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+
+  labelStyles: {
+    paddingVertical: 8,
+    marginLeft: width * 0.06,
+    fontSize: FS_height(2.3),
+    fontFamily: FONTS.WorkSans_SemiBold,
+    color: COLORS.pure_Black,
+    
+  },
+  
+
+});
