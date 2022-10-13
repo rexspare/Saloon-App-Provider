@@ -17,7 +17,7 @@ const ViewProfile = (props) => {
             <GoBackHeader onpress={() => props.navigation.goBack()} />
             <Layout fixed={false}>
                 {/* Image Container */}
-                <View style={styles.topContainer}>
+                {/* <View style={styles.topContainer}>
                     <TouchableOpacity activeOpacity={0.9}>
                         <Image source={{ uri: "https://picsum.photos/200/300" }}
                             style={styles.image} />
@@ -25,14 +25,13 @@ const ViewProfile = (props) => {
                             <MTCIcons name='pencil-outline' size={FS_val(14, 700)} color={COLORS.pure_White} />
                         </View>
                     </TouchableOpacity>
-                </View>
+                </View> */}
 
                 {/* Body */}
                 <View style={{ backgroundColor: COLORS.primary }}>
                     <View style={styles.editProfileHeader}>
-                        <Heading>{lang._46}</Heading>
-                        <Text_Button textStyles={styles.btnTxt}
-                            title={lang._47} />
+                        <Heading>{`My Profile`}</Heading>
+                       
                     </View>
 
                     <View style={{ marginTop: FS_height(1.8) }}>
@@ -73,23 +72,6 @@ const ViewProfile = (props) => {
                     </View>
                 </View>
 
-                <View style={styles.sectionBreak}></View>
-
-                {/* DELETE ACCOUNT */}
-                <View style={{ backgroundColor: COLORS.primary,paddingTop: 10 }}>
-                    <View style={[styles.editProfileHeader, { justifyContent: "flex-start" }]}>
-                        <Heading>{lang._52}</Heading>
-                    </View>
-
-                    <Label style={[styles.value,
-                        {marginVertical:FS_height(1),paddingHorizontal:'5%', textAlign:"left", fontSize:FS_height(2.4) }]}>
-                        {lang._53}</Label>
-
-                    <Text_Button style={styles.deleteBtn} textStyles={styles.deleteTxt}
-                    title={lang._54}
-                    />
-
-                </View>
 
 
             </Layout>

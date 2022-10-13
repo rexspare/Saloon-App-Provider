@@ -40,9 +40,9 @@ const Menu = [
   },
   {
     id: 6,
-    title: "Customer Support",
-    Icon: <Feather name='life-buoy' size={FS_height(3.5)} color={COLORS.secondary} />,
-    route: "Appointment"
+    title: "Edit Profile",
+    Icon: <Feather name='edit' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "EditProfile"
   },
   {
     id: 7,
@@ -77,11 +77,11 @@ export default function ProfileMain(props) {
         <Layout fixed={false}>
           {/* Header */}
           <View style={styles.topContainer}>
-            <View style={styles.imageContainer}>
+            {/* <View style={styles.imageContainer}>
               <Image source={{ uri: "https://picsum.photos/200/300" }}
                 style={styles.image} />
-            </View>
-            <Heading style={{ fontSize: FS_height(3.5), marginTop: '3%' }}>{user.username}</Heading>
+            </View> */}
+            <Heading style={{ fontSize: FS_height(3.5) }}>{user.username}</Heading>
             <Text_Button title={lang._51} textStyles={styles.viewProfile}
               onpress={() => props.navigation.navigate("ViewProfile")} />
           </View>
@@ -104,7 +104,7 @@ export default function ProfileMain(props) {
 const styles = StyleSheet.create({
   topContainer: {
     width: width,
-    height: height * 0.41,
+    height: height * 0.20,
     justifyContent: "space-evenly",
     alignItems: 'center',
     paddingTop: "10%",

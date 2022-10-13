@@ -44,6 +44,9 @@ export default function AddServices(props) {
       return false;
     });
     if (result.data.status) {
+      console.log('====================================');
+      console.log("Add Services Cats: " , result.data);
+      console.log('====================================');
       setVendorCategories(result.data)
       console.log("DATA FETCHED ====>  ", result.data)
     }
@@ -188,7 +191,7 @@ export default function AddServices(props) {
               <Label style={styles.labelStyles}>Enter price</Label>
 
               <Auth_Input
-                placeholder={'Enter service price'}
+                placeholder={'Enter service price in $'}
                 numericKeyboard={true}
                 onChange={setServicePrice}
               />

@@ -15,7 +15,8 @@ ADD_VENDOR_SERVICE:"add-service",
 GET_BOOKING_HISTORY:"get-booking-history",
 UPDATE_BOOKING_HISTORY:"update-booking-status",
 TODAYS_BOOKINGS:"get-today-booking",
-USER_BOOKINGS:"booking"
+USER_BOOKINGS:"booking",
+UPDATE_PROFILE:"update-user-profile"
 
 }
 

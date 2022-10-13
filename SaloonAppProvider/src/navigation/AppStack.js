@@ -12,6 +12,8 @@ import AddServices from '../screens/AddServices';
 import ViewProfile from '../screens/Profile/ViewProfile';
 import Setting from '../screens/Setting';
 import AddUserBookings from '../screens/AddUserBookings';
+import EditProfile from '../screens/EditProfile';
+import Location from '../screens/Authentication/Location';
 
 
 const Tab = createBottomTabNavigator();
@@ -28,6 +30,8 @@ export default function AppStack() {
       <Stack.Screen name='ViewProfile' component={ViewProfile} />
       <Stack.Screen name='Setting' component={Setting} />
       <Stack.Screen name='AddUserBookings' component={AddUserBookings} />
+      <Stack.Screen name='EditProfile' component={EditProfile} />
+      <Stack.Screen name='EditLocation' component={Location} />
 
       {/* ADD YOURSCREEN HERE */}
     </Stack.Navigator>

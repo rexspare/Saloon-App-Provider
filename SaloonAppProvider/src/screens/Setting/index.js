@@ -11,27 +11,27 @@ const Setting = (props) => {
         {
             id: 1,
             title: "Notification Settings",
-            callBack:() =>  props.navigation.navigate("Appointment")
+            callBack:() =>  {}
         },
         {
             id: 2,
             title: "For Partners",
-            callBack:() =>  props.navigation.navigate("Appointment")
+            callBack:() =>  {}
         },
         {
             id: 3,
             title: "Privacy Policy",
-            callBack:() =>  props.navigation.navigate("Appointment")
+            callBack:() =>  {}
         },
         {
             id: 4,
             title: "Terms of Service",
-            callBack:() =>  props.navigation.navigate("Appointment")
+            callBack:() =>  {}
         },
         {
             id: 5,
             title: "Terms of Use",
-            callBack:() =>  props.navigation.navigate("Appointment")
+            callBack:() =>  {}
         },
     ]
     
