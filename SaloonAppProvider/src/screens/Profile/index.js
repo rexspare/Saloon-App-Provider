@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import MTCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import commonStyles from '../../assets/styles/CommonStyles'
 import { Text_Button } from '../../components/Buttons'
 
@@ -27,25 +28,31 @@ const Menu = [
   },
 
   {
-    id: 3,
+    id: 2,
     title: "Add Services",
     Icon: <Octicons name='diff-added' size={FS_height(3.5)} color={COLORS.secondary} />,
     route: "AddServices"
   },
   {
-    id: 5,
+    id: 3,
+    title: "Reviews",
+    Icon: <MaterialIcons name='preview' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "Reviews"
+  },
+  {
+    id: 4,
     title: "Settings",
     Icon: <Ionicons name='md-settings-outline' size={FS_height(3.5)} color={COLORS.secondary} />,
     route: "Setting"
   },
   {
-    id: 6,
+    id: 5,
     title: "Edit Profile",
     Icon: <Feather name='edit' size={FS_height(3.5)} color={COLORS.secondary} />,
     route: "EditProfile"
   },
   {
-    id: 7,
+    id: 6,
     title: "Log out",
     Icon: <Feather name='log-out' size={FS_height(3.5)} color={COLORS.secondary} />,
     route: "Logout"

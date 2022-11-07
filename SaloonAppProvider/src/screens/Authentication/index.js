@@ -69,7 +69,10 @@ const AuthScreen = (props) => {
             () => { })
         );
         if (response.authenticity === true) {
-          callBack(true)
+          console.log('====================================');
+          console.log(response);
+          console.log('====================================');
+          callBack(response)
         }
       });
     } catch (error) {
@@ -90,8 +93,9 @@ const AuthScreen = (props) => {
     setisLoading(false)
   };
 
-  const callBack = () => {
-    dispatch(setUser({ email: "email@gmail.com" }))
+  const callBack = (result) => {
+    dispatch(setUser(result?.userData))
+    AsyncStorage.setItem(storage_keys.USER_DATA_KEY, JSON.stringify(result?.userData))
     dispatch(setIsUserLoggedIn(true))
   }
 
