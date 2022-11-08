@@ -117,7 +117,7 @@ export default function AddServices(props) {
 
 
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <View style={CommonStyles.container}>
       <Layout fixed={false}>
         <CurveHeader />
 
@@ -254,7 +254,7 @@ export default function AddServices(props) {
           </View>
         </View>
       </Layout>
-    </SafeAreaView>
+    </View>
   )
 }
 

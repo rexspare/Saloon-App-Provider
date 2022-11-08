@@ -167,7 +167,7 @@ const dispatch = useDispatch()
   }
 
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <View style={CommonStyles.container}>
       <Layout fixed={false}>
         <CurveHeader />
 
@@ -360,7 +360,7 @@ const dispatch = useDispatch()
           </View>
         </View>
       </Layout>
-    </SafeAreaView>
+    </View>
   );
 };
 

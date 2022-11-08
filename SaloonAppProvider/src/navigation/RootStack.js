@@ -17,7 +17,7 @@ export default function RootStack() {
 
   return (
     <NavigationContainer>
-      <StatusBar barStyle="light-content"
+      <StatusBar barStyle="dark-content"
         backgroundColor={COLORS.secondary} />
       <Stack.Navigator screenOptions={screenOptionStyle}>
         {isUserLoggedIn ?

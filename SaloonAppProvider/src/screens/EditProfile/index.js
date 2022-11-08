@@ -136,7 +136,7 @@ import {
     }
   
     return (
-      <SafeAreaView style={CommonStyles.container}>
+      <View style={CommonStyles.container}>
         <Layout fixed={false}>
           <CurveHeader />
   
@@ -289,7 +289,7 @@ import {
             </View>
           </View>
         </Layout>
-      </SafeAreaView>
+      </View>
     );
   };
   

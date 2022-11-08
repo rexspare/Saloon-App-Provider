@@ -61,7 +61,7 @@ const SignUp = (props) => {
   }
 
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <View style={CommonStyles.container}>
       <Layout fixed={false}>
         <CurveHeader />
         <View style={{}}>
@@ -147,7 +147,7 @@ const SignUp = (props) => {
 
 
       </Layout>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
   ,
   agreementContainer: {
     flexDirection: 'row',
-    width: "100%",
-    marginBottom: 15
+    width: "90%",
+    marginBottom: 30
   },
   LabelAgree: {
     fontSize: FS_height(2),

@@ -121,7 +121,7 @@ export default function AddUserBookings(props) {
 
 
     return (
-        <SafeAreaView style={CommonStyles.container}>
+        <View style={CommonStyles.container}>
             <Layout fixed={false}>
                 <CurveHeader />
 
@@ -254,7 +254,7 @@ export default function AddUserBookings(props) {
                     </View>
                 </View>
             </Layout>
-        </SafeAreaView>
+        </View>
     )
 }
 

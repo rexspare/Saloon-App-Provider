@@ -66,7 +66,7 @@ const TabStack = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { height: 55, display: visible ? "flex" : "none" },
+        tabBarStyle: { height: Platform.OS === 'ios' ? 75 : 55, display: visible ? "flex" : "none" },
         tabBarShowLabel: false
       }}
     >

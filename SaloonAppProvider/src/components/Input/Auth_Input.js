@@ -30,7 +30,7 @@ const Auth_Input = (props) => {
                     placeholderTextColor={COLORS.subtle}
                     onChangeText={props.onChange}
                     editable={props.editable}
-
+                    
 
 
                 />

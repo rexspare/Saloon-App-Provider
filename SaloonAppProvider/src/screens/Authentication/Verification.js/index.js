@@ -51,7 +51,7 @@ const Verify = (props) => {
       const result = await apiRequest({
         method: "post",
         url: ROUTES.LOGIN,
-        data: { email: mData.email, password: mData.password }
+        data: { email: mData.email, password: mData.password , role: 'vendor' }
       }).catch((err) => {
         setisLoading(false)
       });
@@ -69,7 +69,7 @@ const Verify = (props) => {
 
 
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <View style={CommonStyles.container}>
       <Layout fixed={false}>
         <View style={{ height: height - 60 }}>
           <CurveHeader />
@@ -115,7 +115,7 @@ const Verify = (props) => {
 
         </View>
       </Layout>
-    </SafeAreaView>
+    </View>
   )
 }
 
