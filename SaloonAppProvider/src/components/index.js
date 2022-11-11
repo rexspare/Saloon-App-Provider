@@ -8,6 +8,8 @@ import CurveHeader from "./CurveHeader";
 import CheckBox from "./CheckBox";
 import DiscoverItem from "./DiscoverItem";
 import DiscoverItem_2 from "./DiscoverItem_2";
+import GoBackHeader from "./GoBackHeader";
+
 
 export {
     Branding,
@@ -19,5 +21,6 @@ export {
     CurveHeader, 
     CheckBox,
     DiscoverItem,
-    DiscoverItem_2
+    DiscoverItem_2,
+    GoBackHeader
 }

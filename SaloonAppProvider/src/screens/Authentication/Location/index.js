@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput, Alert, Platform } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 
 const { width, height } = Dimensions.get('window');
@@ -53,7 +53,7 @@ export default function Location(props) {
 
     const handleLocationRequest = () => {
 
-        check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+        check(Platform.OS === 'android' ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
             .then((result) => {
                 if (result === RESULTS.GRANTED) {
                     console.log("==========> GRANTED")
@@ -61,12 +61,12 @@ export default function Location(props) {
                     getCurrentLocation()
                 } else {
                     setisPermissionAllowed(false)
-                    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+                    request(Platform.OS === 'android' ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
                         if (result === RESULTS.GRANTED) {
                             setisPermissionAllowed(true)
                             getCurrentLocation()
                         }
-                        check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((result) => {
+                        check(Platform.OS === 'android' ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result) => {
                             if (result === RESULTS.GRANTED) {
                                 setisPermissionAllowed(true)
                                 getCurrentLocation()
