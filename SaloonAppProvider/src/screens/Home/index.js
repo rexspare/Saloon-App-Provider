@@ -4,45 +4,28 @@ import { CurveHeader, Heading, Label, Layout, Text_type1 } from '../../component
 import commonStyles from '../../assets/styles/CommonStyles';
 import { COLORS, FONTS, FS_height, height, width } from '../../utils/Common';
 import WeekView from 'react-native-week-view';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
 import { showFlash } from '../../utils/MyUtils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getTodaysBooking } from '../../Data/Local/Store/Actions';
 
 
 
 const Home = (props) => {
 
   const user = useSelector((state) => state.authReducer.user)
-  const [todaysBooking, setTodaysBooking] = useState([])
+  const todaysBooking = useSelector((state) => state.authReducer.todaysBooking)
   const [modalVisible, setModalVisible] = useState(false)
   const [customerDetails, setCustomerDetails] = useState('')
-
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    getTodaysBooking();
+   if(user?.id){
+    dispatch(getTodaysBooking(user?.id))
+   }
   }, [])
-
-  const getTodaysBooking = async () => {
-
-    const result = await apiRequest({
-      method: "POST",
-      url: ROUTES.TODAYS_BOOKINGS,
-      data: { user_id: user.id }
-    }).catch((err) => {
-      showFlash("Network Error", "danger", 'auto',)
-      return false;
-    });
-    if (result.data.status) {
-      setTodaysBooking(result.data.data)
-      // showFlash("Todays booking's fetched", "success", 'auto')
-      console.log("D--------> ", result.data)
-    }
-    else {
-      console.log(result.data)
-    }
-  }
 
   const updatedObjectArray = todaysBooking.map((obj) => (
     {
@@ -54,8 +37,6 @@ const Home = (props) => {
       phone: obj.phone,
       title: obj.service_title,
       price: obj.service_price,
-
-
     }
   ))
 

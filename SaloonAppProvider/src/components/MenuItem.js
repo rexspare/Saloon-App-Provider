@@ -15,17 +15,18 @@ const MenuItem = (props) => {
                 {Icon}
             </If>
             <If condition={!Icon}>
-                <View style={{width:0}}></View>
+                <View style={{ width: 0 }}></View>
             </If>
-            <Label style={[styles.title, {left :Icon ? '12%' :0}]}>{title}</Label>
-            <AntDesign name='right' size={FS_height(3.3)} color={COLORS.secondary} />
+            <Label style={[styles.title, { left: Icon ? '12%' : 0 }]}>{title}</Label>
+                {props.element}
         </TouchableOpacity>
     )
 }
 
 MenuItem.defaultProps = {
     onpress: () => { },
-    title: "Apponintments"
+    title: "Apponintments",
+    element : <AntDesign name='right' size={FS_height(3.3)} color={COLORS.secondary} />
 }
 
 const styles = StyleSheet.create({

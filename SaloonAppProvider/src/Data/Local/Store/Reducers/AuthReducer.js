@@ -7,7 +7,9 @@ var defaultState = {
   isUserLoggedIn: false,
   categories: [],
   mylocaton: {},
-  reviews : []
+  reviews : [],
+  todaysBooking :[],
+  allPendingOrders : []
 };
 
 
@@ -41,6 +43,18 @@ var authReducer = (state = defaultState, action) => {
     case Types.REVIEWS: {
       let newState = Object.assign({}, state);
       newState.reviews = action.payload;
+      return newState;
+    }
+
+    case Types.TODAYS_BOOKING: {
+      let newState = Object.assign({}, state);
+      newState.todaysBooking = action.payload;
+      return newState;
+    }
+
+    case Types.ALL_PENDING_ORDERS: {
+      let newState = Object.assign({}, state);
+      newState.allPendingOrders = action.payload;
       return newState;
     }
 

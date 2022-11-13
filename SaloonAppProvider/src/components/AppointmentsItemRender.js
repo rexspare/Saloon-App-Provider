@@ -19,7 +19,7 @@ export default function AppointmentsItemRender(props) {
         category,
         booking_id, 
         updateOrder, 
-     
+        player_id
 
     } = props
 
@@ -151,7 +151,7 @@ export default function AppointmentsItemRender(props) {
                             <Auth_Button
                                 title={'Accept'}
                                 style={{ backgroundColor: COLORS.success, width: 130 }}
-                            onpress={() => updateOrder('accepteted', booking_id)}
+                            onpress={() => updateOrder('accepted', booking_id, player_id, title)}
                            
 
                             />
@@ -159,7 +159,7 @@ export default function AppointmentsItemRender(props) {
                             <Auth_Button
                                 title={'Reject'}
                                 style={{ backgroundColor: 'red', width: 130 }}
-                            onpress={() => updateOrder('cancelled', booking_id)}
+                            onpress={() => updateOrder('cancelled', booking_id, player_id, title)}
                            
 
                             />

@@ -2,52 +2,28 @@ import { StyleSheet, View, FlatList, ActivityIndicator, Text } from 'react-nativ
 import React, { useState, useEffect } from 'react'
 import { ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showFlash } from '../../utils/MyUtils'
 import { useFocusEffect } from '@react-navigation/native';
 import AppointmentsItemRender from '../../components/AppointmentsItemRender';
 import { Label } from '../../components';
 import { width, FS_height, FONTS, COLORS } from '../../utils/Common';
+import { getPendingBookingHistory } from '../../Data/Local/Store/Actions';
 
 
 
 export default function PendingOrders() {
 
+  const allPendingOrders = useSelector((state) => state.authReducer.allPendingOrders)
   const user = useSelector((state) => state.authReducer.user)
-  const [allPendingOrders, setAllPendingOrders] = useState([])
+  const dispatch = useDispatch()
 
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log("HEREs");
-      getPendingBookingHistory()
-    }, [])
-  );
+  useEffect(() => {
+    dispatch(getPendingBookingHistory(user?.id))
+  }, [])
+  
 
-
-  const getPendingBookingHistory = async () => {
-
-
-    const result = await apiRequest({
-      method: "POST",
-      url: ROUTES.GET_BOOKING_HISTORY,
-      data: { user_id: user.id, type: 'vendor', booking_status: 'pending' }
-    }).catch((err) => {
-      showFlash("Network Error", "danger", 'auto',)
-      return false;
-    });
-    if (result.data.message) {
-
-     
-      setAllPendingOrders(result.data.data);
-      console.log("PendingOrders ========> ", result.data.data)
-
-
-    }
-    else {
-    }
-  }
-
-  const updatePendingStatus = async (status,booking_id ) => {
+  const updatePendingStatus = async (status,booking_id,player_id , title) => {
     console.log("status + booking" , status, booking_id)
 
     const result = await apiRequest({
@@ -60,12 +36,19 @@ export default function PendingOrders() {
       return false;
     });
     if (result.data.status) {
-
       showFlash(result.data.message, "success", 'auto')
-      getPendingBookingHistory();
-    
-     
-
+      dispatch(getPendingBookingHistory(user?.id))
+      if(player_id){
+        const notificationResponse = await apiRequest({
+            method: "post",
+            url: ROUTES.SEND_PROVIDER_NOTIFICATION,
+            data: {
+                player_id :player_id,
+                message : `Your booking for ${title} has been ${status} by ${user?.username}`
+            }
+        }).catch((err) => {
+        });
+    }
     }
     else {
     }
@@ -98,7 +81,7 @@ export default function PendingOrders() {
             booking_id = {item.booking_id}
             updateOrder = {updatePendingStatus}
             category = 'pending'
-           
+            player_id={item.player_id}
           />
 
         }

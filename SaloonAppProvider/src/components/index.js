@@ -9,7 +9,7 @@ import CheckBox from "./CheckBox";
 import DiscoverItem from "./DiscoverItem";
 import DiscoverItem_2 from "./DiscoverItem_2";
 import GoBackHeader from "./GoBackHeader";
-
+import MenuItem from "./MenuItem";
 
 export {
     Branding,
@@ -22,5 +22,6 @@ export {
     CheckBox,
     DiscoverItem,
     DiscoverItem_2,
-    GoBackHeader
+    GoBackHeader,
+    MenuItem
 }

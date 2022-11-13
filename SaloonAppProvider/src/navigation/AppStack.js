@@ -15,7 +15,9 @@ import AddUserBookings from '../screens/AddUserBookings';
 import EditProfile from '../screens/EditProfile';
 import Location from '../screens/Authentication/Location';
 import Reviews from '../screens/Reviews';
-
+import TermsConditions from '../screens/About/TermsConditions'
+import PrivacyPolicy from '../screens/About/PrivacyPolicy'
+import ChangePassword from '../screens/Setting/ChangePassword';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -34,6 +36,9 @@ export default function AppStack() {
       <Stack.Screen name='EditProfile' component={EditProfile} />
       <Stack.Screen name='EditLocation' component={Location} />
       <Stack.Screen name='Reviews' component={Reviews} />
+      <Stack.Screen name='Terms' component={TermsConditions} />
+      <Stack.Screen name='Privacy' component={PrivacyPolicy} />
+      <Stack.Screen name='ChangePassword' component={ChangePassword} />
 
       {/* ADD YOURSCREEN HERE */}
     </Stack.Navigator>

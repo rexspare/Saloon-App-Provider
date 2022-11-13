@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../../Data/Local/Store/Actions'
 import { storage_keys } from '../../../utils/StorageKeys'
+import OneSignal from 'react-native-onesignal';
 
 const Verify = (props) => {
   const { navigation, route } = props
@@ -46,12 +47,15 @@ const Verify = (props) => {
   }
 
   const handleLogin = async () => {
+    OneSignal.getDeviceState()
+    .then(async (data) => {
+
     AsyncStorage.getItem('@Login').then(async (data) => {
       let mData = await JSON.parse(data)
       const result = await apiRequest({
         method: "post",
         url: ROUTES.LOGIN,
-        data: { email: mData.email, password: mData.password , role: 'vendor' }
+        data: { email: mData.email, password: mData.password , role: 'vendor',player_id : data?.userId }
       }).catch((err) => {
         setisLoading(false)
       });
@@ -65,6 +69,11 @@ const Verify = (props) => {
       } else {
       }
     })
+
+  })
+  .catch(() =>{
+    showFlash("Error Logging in please Login NOW", 'warning', 'none')
+  })
   }
 
 

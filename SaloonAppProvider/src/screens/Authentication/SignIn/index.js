@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import { setUser, setIsUserLoggedIn } from '../../../Data/Local/Store/Actions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { storage_keys } from '../../../utils/StorageKeys'
+import OneSignal from 'react-native-onesignal';
 
 
 const SignIn = (props) => {
@@ -24,28 +25,33 @@ const SignIn = (props) => {
 
   const handlecontinue = async () => {
     setisLoading(true)
-    if (password != "") {
-      const result = await apiRequest({
-        method: "post",
-        url: ROUTES.LOGIN,
-        data: { email: route.params.email, password, role: 'vendor' }
-      }).catch((err) => {
-        showFlash("Somehomg Went Wrong", "danger", 'auto')
-        setisLoading(false)
-      });
-      if (result?.data?.status) {
-        console.log(result.data);
-        showFlash(result.data.message, 'success', 'none')
-        dispatch(setUser(result?.data?.userData))
-        AsyncStorage.setItem(storage_keys.USER_DATA_KEY, JSON.stringify(result?.data?.userData))
-        dispatch(setIsUserLoggedIn(true))
-        AsyncStorage.multiRemove(["@Email", "@Login"])
-      } else {
-        showFlash(result.data.message, 'danger', 'none')
-      }
-    } else {
-      showFlash("Please Enter your password!", "warning", "auto")
-    }
+    OneSignal.getDeviceState()
+      .then(async (data) => {
+        if (password != "") {
+          const result = await apiRequest({
+            method: "post",
+            url: ROUTES.LOGIN,
+            data: { email: route.params.email, password, role: 'vendor', player_id : data?.userId }
+          }).catch((err) => {
+            showFlash("Somehomg Went Wrong", "danger", 'auto')
+            setisLoading(false)
+          });
+          if (result?.data?.status) {
+            console.log(result.data);
+            showFlash(result.data.message, 'success', 'none')
+            dispatch(setUser(result?.data?.userData))
+            AsyncStorage.setItem(storage_keys.USER_DATA_KEY, JSON.stringify(result?.data?.userData))
+            dispatch(setIsUserLoggedIn(true))
+            AsyncStorage.multiRemove(["@Email", "@Login"])
+          } else {
+            showFlash(result.data.message, 'danger', 'none')
+          }
+        } else {
+          showFlash("Please Enter your password!", "warning", "auto")
+        }
+      })
+      .catch(() =>{setisLoading(false)})
+    
     setisLoading(false)
 
   }

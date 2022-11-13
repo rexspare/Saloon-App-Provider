@@ -65,7 +65,7 @@ export const getReviews = (user_id) => async (dispatch) => {
   const result = await apiRequest({
     method: "POST",
     url: ROUTES.REVIEWS,
-    data : {vendor_id : user_id}
+    data: { vendor_id: user_id }
   }).catch((err) => {
     return false;
   });
@@ -73,6 +73,42 @@ export const getReviews = (user_id) => async (dispatch) => {
     dispatch({ type: Types.REVIEWS, payload: result.data.reviews });
   } else {
     dispatch({ type: Types.REVIEWS, payload: [] });
+    return result;
+  }
+
+}
+
+export const getTodaysBooking = (user_id) => async (dispatch) => {
+  const result = await apiRequest({
+    method: "POST",
+    url: ROUTES.TODAYS_BOOKINGS,
+    data: { user_id: user_id }
+  }).catch((err) => {
+    showFlash("Network Error", "danger", 'auto',)
+    return false;
+  });
+  if (result?.data?.status) {
+    dispatch({ type: Types.TODAYS_BOOKING, payload: result.data.data });
+  } else {
+    dispatch({ type: Types.TODAYS_BOOKING, payload: [] });
+    return result;
+  }
+
+}
+
+export const getPendingBookingHistory = (user_id) => async (dispatch) => {
+  const result = await apiRequest({
+    method: "POST",
+    url: ROUTES.GET_BOOKING_HISTORY,
+    data: { user_id: user_id, type: 'vendor', booking_status: 'pending' }
+  }).catch((err) => {
+    showFlash("Network Error", "danger", 'auto',)
+    return false;
+  });
+  if (result?.data?.status) {
+    dispatch({ type: Types.ALL_PENDING_ORDERS, payload: result.data.data});
+  } else {
+    dispatch({ type: Types.ALL_PENDING_ORDERS, payload: [] });
     return result;
   }
 

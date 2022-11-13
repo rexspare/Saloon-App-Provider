@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StyleSheet , Platform} from 'react-native'
+import { View, Text, Linking, StyleSheet , Platform} from 'react-native'
 import React, { useState, useEffect } from 'react'
 import CommonStyles from '../../assets/styles/CommonStyles'
 import { COLORS, FS_height, height, width } from '../../utils/Common'
@@ -13,6 +13,8 @@ import { ROUTES } from '../../Data/remote/Routes'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch } from 'react-redux'
 import { registerUser, setUser, setIsUserLoggedIn } from '../../Data/Local/Store/Actions/AuthActions'
+import OneSignal from 'react-native-onesignal';
+import { storage_keys } from '../../utils/StorageKeys'
 
 const AuthScreen = (props) => {
   const [email, setemail] = useState('')
@@ -59,6 +61,7 @@ const AuthScreen = (props) => {
   const GoogleSignUp = async () => {
     setisLoading(true)
     try {
+      const onesignalData = await OneSignal.getDeviceState(); 
       await GoogleSignin.hasPlayServices();
       await GoogleSignin.signIn().then(async (result) => {
         const response = await dispatch(
@@ -66,15 +69,17 @@ const AuthScreen = (props) => {
             email: result.user?.email,
             username: result.user?.name,
             role: 'vendor',
-            googleID: result.user?.id
+            googleID: result.user?.id,
+            player_id: onesignalData?.userId
           },
             () => { })
         );
         if (response.authenticity === true) {
-          console.log('====================================');
-          console.log(response);
-          console.log('====================================');
-          callBack(response)
+          if (response?.userData?.role == "vendor") {
+            callBack(response)
+          } else {
+            showFlash("Customers cannot loggin in Business app!", "danger", 'none')
+          }
         }
       });
     } catch (error) {
@@ -154,14 +159,25 @@ const AuthScreen = (props) => {
           {/*  ==============   Section 2   =================== */}
           <View style={[styles.sectionContainer, { paddingTop: 0 }]}>
            <If condition={Platform.OS === 'android'}>
-           <Social_Button type="facebook" />
+           {/* <Social_Button type="facebook" /> */}
             <Social_Button type="google" style={{ marginVertical: 20 }}
               onpress={() => GoogleSignUp()} />
            </If>
 
             <Label>{lang._4}</Label>
             <Text_type1 style={{ color: COLORS.subtle, marginVertical: 3 }}>{lang._5}</Text_type1>
-            <Text_Button title={lang._6} />
+            <Text_Button title={lang._6} 
+            onpress={() => {
+              if (Platform.OS === 'ios') {
+                const link = 'itms-apps://apps.apple.com/tr/app/times-tables-lets-learn/id1055437768?l=tr';
+                Linking.canOpenURL(link).then(supported => {
+                  supported && Linking.openURL(link);
+                }, (err) => console.log(err));
+              } else {
+                Linking.openURL("http://play.google.com/store/apps/details?id=com.nuyouuser")
+              }
+            }}
+            />
           </View>
 
           {/*  ==============   END   =================== */}

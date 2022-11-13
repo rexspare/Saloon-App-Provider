@@ -1,40 +1,56 @@
-import { View, Text, SafeAreaView, StyleSheet, Image } from 'react-native'
-import React from 'react'
-import { Layout } from '../../components'
-import MenuItem from '../../components/MenuItem'
+import { SafeAreaView, StyleSheet, Linking,Platform } from 'react-native'
+import React, { useState } from 'react'
+import { GoBackHeader, Heading, Layout, MenuItem } from '../../components'
 import commonStyles from '../../assets/styles/CommonStyles'
 import { COLORS, FS_height, height, width } from '../../utils/Common'
-import GoBackHeader from '../../components/GoBackHeader'
+import ToggleSwitch from 'toggle-switch-react-native'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const Setting = (props) => {
     const Menu = [
         {
             id: 1,
             title: "Notification Settings",
-            callBack:() =>  {}
+            callBack: () => setisOn(!isOn)
         },
         {
             id: 2,
-            title: "For Partners",
-            callBack:() =>  {}
+            title: "Change Password",
+            callBack: () => props.navigation.navigate("ChangePassword")
         },
         {
             id: 3,
-            title: "Privacy Policy",
-            callBack:() =>  {}
+            title: "For Customers",
+            callBack: () => {
+                if (Platform.OS === 'ios') {
+                  const link = 'itms-apps://apps.apple.com/tr/app/times-tables-lets-learn/id1055437768?l=tr';
+                  Linking.canOpenURL(link).then(supported => {
+                    supported && Linking.openURL(link);
+                  }, (err) => console.log(err));
+                } else {
+                  Linking.openURL("http://play.google.com/store/apps/details?id=com.nuyouuser")
+                }
+              }
         },
         {
             id: 4,
-            title: "Terms of Service",
-            callBack:() =>  {}
+            title: "Privacy Policy",
+            callBack: () => props.navigation.navigate("Privacy")
         },
         {
             id: 5,
+            title: "Terms of Service",
+            callBack: () => props.navigation.navigate("Terms")
+        },
+        {
+            id: 6,
             title: "Terms of Use",
-            callBack:() =>  {}
+            callBack: () => props.navigation.navigate("Terms")
         },
     ]
-    
+
+    const [isOn, setisOn] = useState(false)
+
     return (
         <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
             <GoBackHeader onpress={() => props.navigation.goBack()} />
@@ -47,6 +63,18 @@ const Setting = (props) => {
                             key={item.id}
                             title={item.title}
                             onpress={() => item.callBack()}
+                            element={
+                                item.id == 1 ?
+                                <ToggleSwitch
+                                    isOn={isOn}
+                                    onColor="green"
+                                    offColor="red"
+                                    size="medium"
+                                    onToggle={() => setisOn(!isOn)}
+                                /> 
+                                :
+                                <AntDesign name='right' size={FS_height(3.3)} color={COLORS.secondary} />
+                            }
                         />
                     ))
                 }

@@ -1,26 +1,27 @@
 const BASE_URL = "https://nuyou.online/"
 
 const ROUTES = {
-CHECK_USER :"check-user",
-REGISTER :"register-user",
-VERIFY_USER:"verify-user",
-LOGIN:"login-user",
-RESET_PASSWORD:"reset-password-user",
-CHANGE_PASSWORD:"set-new-password-user",
-GET_CATEGORIES:"get-categories",
-GET_SERVICES: "get-services",
-CREATE_VENDOR_PROFILE:"create-vendor-profile",
-GET_VENDOR_SELECTED_CATEGORIES:"get-user-categories",
-ADD_VENDOR_SERVICE:"add-service",
-GET_BOOKING_HISTORY:"get-booking-history",
-UPDATE_BOOKING_HISTORY:"update-booking-status",
-TODAYS_BOOKINGS:"get-today-booking",
-USER_BOOKINGS:"booking",
-UPDATE_PROFILE:"update-user-profile",
-REVIEWS: "get-reviews"
-
+    CHECK_USER: "check-user",
+    REGISTER: "register-user",
+    VERIFY_USER: "verify-user",
+    LOGIN: "login-user",
+    RESET_PASSWORD: "reset-password-user",
+    CHANGE_PASSWORD: "set-new-password-user",
+    GET_CATEGORIES: "get-categories",
+    GET_SERVICES: "get-services",
+    CREATE_VENDOR_PROFILE: "create-vendor-profile",
+    GET_VENDOR_SELECTED_CATEGORIES: "get-user-categories",
+    ADD_VENDOR_SERVICE: "add-service",
+    GET_BOOKING_HISTORY: "get-booking-history",
+    UPDATE_BOOKING_HISTORY: "update-booking-status",
+    TODAYS_BOOKINGS: "get-today-booking",
+    USER_BOOKINGS: "booking",
+    UPDATE_PROFILE: "update-user-profile",
+    REVIEWS: "get-reviews",
+    SEND_USER_NOTIFICATION: "send-user-notification",
+    SEND_PROVIDER_NOTIFICATION: 'send-provider-notification'
 }
 
 export {
-    BASE_URL,ROUTES
+    BASE_URL, ROUTES
 }
