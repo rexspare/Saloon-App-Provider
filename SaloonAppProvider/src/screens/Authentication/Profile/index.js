@@ -178,10 +178,10 @@ const dispatch = useDispatch()
           />
         )}
 
-        <MyDateTimePicker
+        <MyDateTimePickers
           isModalVisible={isOpenTimeModalVisible}
           modalCallback={() => setOpenTimeModalVisible(false)}
-          onDateSelected={(date) => console.log(new Date(date).getTime())}
+          onDateSelected={(date) => setBusinessOpenTime(date)}
         />
 
 
