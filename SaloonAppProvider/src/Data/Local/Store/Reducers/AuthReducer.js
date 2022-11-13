@@ -6,7 +6,8 @@ var defaultState = {
   findingUser: true,
   isUserLoggedIn: false,
   categories: [],
-  mylocaton: {}
+  mylocaton: {},
+  reviews : []
 };
 
 
@@ -34,6 +35,12 @@ var authReducer = (state = defaultState, action) => {
     case Types.CATEGORIES: {
       let newState = Object.assign({}, state);
       newState.mylocaton = action.payload;
+      return newState;
+    }
+
+    case Types.REVIEWS: {
+      let newState = Object.assign({}, state);
+      newState.reviews = action.payload;
       return newState;
     }
 

@@ -26,8 +26,9 @@ const COLORS = {
     accent_rgba: "rgba(249, 219, 143, 255)",
     subtle :"#878c92",
     success :"#00a36e",
-    Links :"#0044CC"
-
+    Links :"#0044CC",
+    grey: "#EDEDED",
+    ServiceHeader: "#010124"
 }
 
 const width = Dimensions.get("window").width

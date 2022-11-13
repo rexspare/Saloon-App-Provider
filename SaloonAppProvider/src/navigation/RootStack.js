@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { COLORS } from '../utils/Common';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
@@ -17,8 +17,11 @@ export default function RootStack() {
 
   return (
     <NavigationContainer>
-      <StatusBar barStyle="light-content"
+      {
+        Platform.OS === 'android' && 
+        <StatusBar barStyle="light-content"
         backgroundColor={COLORS.secondary} />
+      }
       <Stack.Navigator screenOptions={screenOptionStyle}>
         {isUserLoggedIn ?
         <Stack.Screen name="AppStack" component={AppStack} />

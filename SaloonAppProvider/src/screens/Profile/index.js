@@ -1,121 +1,140 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Auth_Button } from '../../components/Buttons'
-import { useDispatch } from 'react-redux'
 import { setIsUserLoggedIn } from '../../Data/Local/Store/Actions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { storage_keys } from '../../utils/StorageKeys'
 import CommonStyles from '../../assets/styles/CommonStyles'
 import { DiscoverItem, DiscoverItem_2, Heading, Label, Layout } from '../../components';
+import MenuItem from '../../components/MenuItem'
 import { COLORS, FS_val, height, width, FS_height, FONTS } from '../../utils/Common'
 import { lang } from '../../assets/languages'
+import { useDispatch, useSelector } from 'react-redux'
+import MTCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import commonStyles from '../../assets/styles/CommonStyles'
+import { Text_Button } from '../../components/Buttons'
 
-import FIcons from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
-export default function Profile(props) {
+const Menu = [
+  {
+    id: 1,
+    title: "My bookings",
+    Icon: <MTCIcons name='calendar-month-outline' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "Appointment"
+  },
+
+  {
+    id: 2,
+    title: "Add Services",
+    Icon: <Octicons name='diff-added' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "AddServices"
+  },
+  {
+    id: 3,
+    title: "Reviews",
+    Icon: <MaterialIcons name='preview' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "Reviews"
+  },
+  {
+    id: 4,
+    title: "Settings",
+    Icon: <Ionicons name='md-settings-outline' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "Setting"
+  },
+  {
+    id: 5,
+    title: "Edit Profile",
+    Icon: <Feather name='edit' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "EditProfile"
+  },
+  {
+    id: 6,
+    title: "Log out",
+    Icon: <Feather name='log-out' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "Logout"
+  },
+  
+]
+
+
+export default function ProfileMain(props) {
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.authReducer.user)
 
   const handleLogout = () => {
     AsyncStorage.removeItem(storage_keys.USER_DATA_KEY)
       .then(() => {
         dispatch(setIsUserLoggedIn(false))
+       dispatch(setUser({})) 
       })
   }
 
-
-  return (
-    <SafeAreaView style={CommonStyles.container} >
-
-
-      <View style={{ flex: 1 }}>
-
-
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 50 }}>
-          <TouchableOpacity
-          >
-            <Image
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 15,
-
-                backgroundColor: 'rgba(0,0,0,0.8)',
-              }}
-              source={require("../../assets/images/user.png")}
-            />
-
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ marginLeft: -30, padding: 5, justifyContent: "flex-end" }}
-          >
-            <View style={{ backgroundColor: 'white', borderRadius: 150 / 2, borderColor: '#ccc', borderWidth: 2 }}>
-              <FIcons name="upload" style={styles.imageselector} size={13} color={COLORS.pure_Black} />
-            </View>
-          </TouchableOpacity>
-
-        </View>
+  useEffect(() => {
+    console.log(user.username);
+    },[])
 
 
 
-        <TouchableOpacity style={{ flexDirection: 'row', marginHorizontal: 20, alignItems:'center' ,marginTop: 50, flexWrap: 'wrap'}}
-        onPress={()=> props.navigation.navigate('AddServices') }>
-
-            <Label style={styles._label}>Services</Label>
-            <Ionicons name="ios-chevron-forward-outline" style={{ position: 'absolute', right: 0 }} size={20} color={COLORS.pure_Black} />
-            
-        </TouchableOpacity>
-
-        <View style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 2, marginHorizontal:20, marginVertical: 15}} />
-
-        <TouchableOpacity style={{ flexDirection: 'row', marginHorizontal: 20, alignItems:'center' , flexWrap: 'wrap'}}>
-
-            <Label style={styles._label}>Settings</Label>
-            <Ionicons name="ios-chevron-forward-outline" style={{ position: 'absolute', right: 0 }} size={20} color={COLORS.pure_Black} />
-            
-        </TouchableOpacity>
-
-        <View style={{backgroundColor: 'rgba(0,0,0,0.1)', height: 2, marginHorizontal:20, marginVertical: 15}} />
-
-        <TouchableOpacity style={{ flexDirection: 'row', marginHorizontal: 20, alignItems:'center' , flexWrap: 'wrap'}}
-        onPress={()=> handleLogout() }>
-
-            <Label style={styles._label}>Logout</Label>
-            <Ionicons name="ios-chevron-forward-outline" style={{ position: 'absolute', right: 0 }} size={20} color={COLORS.pure_Black} />
-            
-        </TouchableOpacity>
-       
-
-  
-
-      </View>
-
-
-
-    </SafeAreaView>
-  )
+    return (
+      <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
+        <Layout fixed={false}>
+          {/* Header */}
+          <View style={styles.topContainer}>
+            {/* <View style={styles.imageContainer}>
+              <Image source={{ uri: "https://picsum.photos/200/300" }}
+                style={styles.image} />
+            </View> */}
+            <Heading style={{ fontSize: FS_height(3.5) }}>{user.username}</Heading>
+            <Text_Button title={lang._51} textStyles={styles.viewProfile}
+              onpress={() => props.navigation.navigate("ViewProfile")} />
+          </View>
+          {/* List Items */}
+          {
+            Menu.map((item) => (
+              <MenuItem
+                key={item.id}
+                title={item.title}
+                Icon={item.Icon}
+                onpress={() => item.route == "Logout" ? handleLogout() : props.navigation.navigate(item.route)}
+              />
+            ))
+          }
+        </Layout>
+      </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
-  HeaderContainer: {
+  topContainer: {
     width: width,
-    paddingHorizontal: '5%',
-    paddingVertical: 25,
-    ...CommonStyles._center,
+    height: height * 0.20,
+    justifyContent: "space-evenly",
+    alignItems: 'center',
+    paddingTop: "10%",
+    paddingBottom: "8%"
   },
-  imageselector: {
-    padding: 8,
-    elevation: 6
-  },
-  sectionContainer: {
+  imageContainer: {
+    width: width * 0.37,
+    height: width * 0.37,
+    borderRadius: width * 0.2,
+    borderWidth: 3,
+    borderColor: COLORS.Links,
+    ...commonStyles._center
 
-
-    ...CommonStyles._center,
   },
-  _label: {
-    fontFamily: FONTS.WorkSans_Medium,
-    fontSize: FS_height(2.7),
-   
+  image: {
+    width: width * 0.37 - 10,
+    maxWidth: 100,
+    height: width * 0.37 - 10,
+    maxHeight: 100,
+    borderRadius: width * 0.1,
+  },
+  viewProfile: {
+    color: COLORS.Links,
+    fontSize: FS_height(2.4),
   }
 })

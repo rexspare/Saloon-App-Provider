@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { CurveHeader, Heading, Label, Text_type1, Layout } from '../components';
-import { COLORS, FONTS, FS_height, FS_val } from '../utils/Common';
+import { COLORS, FONTS} from '../utils/Common';
+import { Auth_Button } from './Buttons';
+
+
 
 export default function AppointmentsItemRender(props) {
     const {
@@ -12,8 +15,15 @@ export default function AppointmentsItemRender(props) {
         time,
         start_time,
         end_time,
-        price
+        price,
+        category,
+        booking_id, 
+        updateOrder, 
+     
+
     } = props
+
+    
 
     return (
         <View  >
@@ -33,7 +43,7 @@ export default function AppointmentsItemRender(props) {
                             </Text_type1>
 
                             <Text_type1
-                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
+                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium }}
 
                                 color={COLORS.pure_Black}>
                                 {`${name}`}
@@ -50,7 +60,7 @@ export default function AppointmentsItemRender(props) {
                             </Text_type1>
 
                             <Text_type1
-                               style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
+                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium }}
 
                                 color={COLORS.pure_Black}>
                                 {`${phone}`}
@@ -65,7 +75,7 @@ export default function AppointmentsItemRender(props) {
                             </Text_type1>
 
                             <Text_type1
-                               style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium, marginEnd: 30 }}
+                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium, marginEnd: 30 }}
 
                                 color={COLORS.pure_Black}>
                                 {`${title}`}
@@ -81,7 +91,7 @@ export default function AppointmentsItemRender(props) {
                             </Text_type1>
 
                             <Text_type1
-                               style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
+                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium }}
 
                                 color={COLORS.pure_Black}>
                                 {`${time}`}
@@ -97,7 +107,7 @@ export default function AppointmentsItemRender(props) {
                             </Text_type1>
 
                             <Text_type1
-                               style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
+                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium }}
 
                                 color={COLORS.pure_Black}>
                                 {`${start_time}`}
@@ -113,7 +123,7 @@ export default function AppointmentsItemRender(props) {
                             </Text_type1>
 
                             <Text_type1
-                               style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
+                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium }}
 
                                 color={COLORS.pure_Black}>
                                 {`${end_time}`}
@@ -129,12 +139,34 @@ export default function AppointmentsItemRender(props) {
                             </Text_type1>
 
                             <Text_type1
-                               style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium}}
+                                style={{ textAlign: "left", fontFamily: FONTS.WorkSans_Medium }}
 
                                 color={COLORS.pure_Black}>
                                 {`${price}`}
                             </Text_type1>
                         </View>
+
+                        {category == 'pending' && <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-evenly', marginTop: 20 }} >
+
+                            <Auth_Button
+                                title={'Accept'}
+                                style={{ backgroundColor: COLORS.success, width: 130 }}
+                            onpress={() => updateOrder('accepteted', booking_id)}
+                           
+
+                            />
+
+                            <Auth_Button
+                                title={'Reject'}
+                                style={{ backgroundColor: 'red', width: 130 }}
+                            onpress={() => updateOrder('cancelled', booking_id)}
+                           
+
+                            />
+
+                        </View>}
+
+
 
 
                     </View>

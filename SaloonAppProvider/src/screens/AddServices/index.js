@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet,  View, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react';
 import { ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux';
 import { showFlash } from '../../utils/MyUtils'
 import CommonStyles from '../../assets/styles/CommonStyles';
 import { CurveHeader, Heading, Label, Text_type1, Layout } from '../../components';
-import { height, width, COLORS, FS_height, FS_val, FONTS } from '../../utils/Common';
-import { lang } from '../../assets/languages';
+import RadioBox from '../../components/RadioBox'
+import { width, COLORS, FS_height, FS_val, FONTS } from '../../utils/Common';
 import { Auth_Input } from '../../components/Input';
 import { Auth_Button } from '../../components/Buttons';
-import { Picker } from '@react-native-picker/picker';
 
 export default function AddServices(props) {
 
@@ -19,6 +18,8 @@ export default function AddServices(props) {
   const [serviceTitle, setServiceTitle] = useState('')
   const [serviceDescription, setServiceDescription] = useState('')
   const [gender, setGender] = useState('')
+  const [male, setMale] = useState(false);
+  const [female, setFemale] = useState(false);
   const [servicePrice, setServicePrice] = useState('')
   const [serviceDuration, setServiceDuration] = useState('')
   const [selectedItem, setSelectedItem] = useState([])
@@ -43,8 +44,10 @@ export default function AddServices(props) {
       return false;
     });
     if (result.data.status) {
+      console.log('====================================');
+      console.log("Add Services Cats: " , result.data);
+      console.log('====================================');
       setVendorCategories(result.data)
-      showFlash("Categories Fetched", "success", 'auto')
       console.log("DATA FETCHED ====>  ", result.data)
     }
     else {
@@ -74,11 +77,10 @@ export default function AddServices(props) {
   }
 
   const handlecontinue = async () => {
-    console.log("Finally --> ", selectedItem)
-
+    
     setisLoading(true)
-    if (serviceTitle != '' && serviceDescription != '' && gender != ''
-      && servicePrice != '' && serviceDuration != '' && selectedItem.length == 1) {
+    if (serviceTitle != '' && serviceDescription != '' && gender !='' &&
+      servicePrice != '' && serviceDuration != '' && selectedItem.length == 1) {
       const result = await apiRequest({
         method: "post",
         url: ROUTES.ADD_VENDOR_SERVICE,
@@ -115,7 +117,7 @@ export default function AddServices(props) {
 
 
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <View style={CommonStyles.container}>
       <Layout fixed={false}>
         <CurveHeader />
 
@@ -160,28 +162,46 @@ export default function AddServices(props) {
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>Select gender</Label>
+              <View style={{ alignSelf: 'center', marginHorizontal: 12 }}>
 
-              <Auth_Input
-                placeholder={'Enter service description'}
-                onChange={setGender}
-              />
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                  <RadioBox
+                  
+                    onPress={() => {setMale(true), setFemale(false), setGender('Male')}}
+                    title={'Male'}
+                    isChecked={male}
+
+                  />
+
+                  <RadioBox
+                    onPress={() => {setFemale(true), setMale(false), setGender('Female')}}
+                    title={'Female'}
+                    isChecked={female}
+
+                  />
+                </View>
+
+
+              </View>
             </View>
 
             <View style={styles.inputContainer}>
-              <Label style={styles.labelStyles}>Select price</Label>
+              <Label style={styles.labelStyles}>Enter price</Label>
 
               <Auth_Input
-                placeholder={'Enter service price'}
+                placeholder={'Enter service price in $'}
                 numericKeyboard={true}
                 onChange={setServicePrice}
               />
             </View>
 
             <View style={styles.inputContainer}>
-              <Label style={styles.labelStyles}>Select duration</Label>
+              <Label style={styles.labelStyles}>Enter duration</Label>
 
               <Auth_Input
-                placeholder={'Enter service duration'}
+                placeholder={'Enter service duration i.e H:MM'}
                 numericKeyboard={true}
                 onChange={setServiceDuration}
               />
@@ -234,7 +254,7 @@ export default function AddServices(props) {
           </View>
         </View>
       </Layout>
-    </SafeAreaView>
+    </View>
   )
 }
 

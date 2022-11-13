@@ -61,4 +61,21 @@ export const getCategories = () => async (dispatch) => {
 
 }
 
+export const getReviews = (user_id) => async (dispatch) => {
+  const result = await apiRequest({
+    method: "POST",
+    url: ROUTES.REVIEWS,
+    data : {vendor_id : user_id}
+  }).catch((err) => {
+    return false;
+  });
+  if (result.data.status) {
+    dispatch({ type: Types.REVIEWS, payload: result.data.reviews });
+  } else {
+    dispatch({ type: Types.REVIEWS, payload: [] });
+    return result;
+  }
+
+}
+
 

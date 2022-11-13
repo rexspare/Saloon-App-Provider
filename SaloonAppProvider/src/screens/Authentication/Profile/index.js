@@ -142,7 +142,7 @@ const dispatch = useDispatch()
     let mediaPer =
       Platform.OS == 'android'
         ? [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION]
-        : Platform.OS == 'ios' ? [PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.PHOTO_LIBRARY] : null;
+        : Platform.OS == 'ios' ? [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] : null;
 
     checkMultiple(mediaPer)
       .then(statuses => {
@@ -167,7 +167,7 @@ const dispatch = useDispatch()
   }
 
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <View style={CommonStyles.container}>
       <Layout fixed={false}>
         <CurveHeader />
 
@@ -360,7 +360,7 @@ const dispatch = useDispatch()
           </View>
         </View>
       </Layout>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -28,7 +28,7 @@ const SignIn = (props) => {
       const result = await apiRequest({
         method: "post",
         url: ROUTES.LOGIN,
-        data: { email: route.params.email, password }
+        data: { email: route.params.email, password, role: 'vendor' }
       }).catch((err) => {
         showFlash("Somehomg Went Wrong", "danger", 'auto')
         setisLoading(false)
@@ -71,7 +71,7 @@ const SignIn = (props) => {
 
   }
   return (
-    <SafeAreaView style={CommonStyles.container}>
+    <View style={CommonStyles.container}>
       <Layout fixed={false}>
         <View style={{ height: height - 60 }}>
           <CurveHeader />
@@ -123,7 +123,7 @@ const SignIn = (props) => {
 
         </View>
       </Layout>
-    </SafeAreaView>
+    </View>
   )
 }
 
