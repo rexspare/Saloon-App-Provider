@@ -19,7 +19,8 @@ const ROUTES = {
     UPDATE_PROFILE: "update-user-profile",
     REVIEWS: "get-reviews",
     SEND_USER_NOTIFICATION: "send-user-notification",
-    SEND_PROVIDER_NOTIFICATION: 'send-provider-notification'
+    SEND_PROVIDER_NOTIFICATION: 'send-provider-notification',
+    USER_IS_NOTIFY : 'user-is-notify'
 }
 
 export {

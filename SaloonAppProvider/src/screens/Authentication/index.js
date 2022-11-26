@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux'
 import { registerUser, setUser, setIsUserLoggedIn } from '../../Data/Local/Store/Actions/AuthActions'
 import OneSignal from 'react-native-onesignal';
 import { storage_keys } from '../../utils/StorageKeys'
+import { showFlash } from '../../utils/MyUtils'
 
 const AuthScreen = (props) => {
   const [email, setemail] = useState('')
@@ -74,11 +75,15 @@ const AuthScreen = (props) => {
           },
             () => { })
         );
+        console.log('====================================');
+        console.log(response.userData);
+        console.log('====================================');
         if (response.authenticity === true) {
-          if (response?.userData?.role == "vendor") {
-            callBack(response)
+          if (response?.userData?.length > 0) {
+              callBack(response)
+           
           } else {
-            showFlash("Customers cannot loggin in Business app!", "danger", 'none')
+            navigation.navigate("Verify", { email: email })
           }
         }
       });
@@ -101,6 +106,7 @@ const AuthScreen = (props) => {
   };
 
   const callBack = (result) => {
+    alert(JSON.stringify(result?.userData))
     dispatch(setUser(result?.userData))
     AsyncStorage.setItem(storage_keys.USER_DATA_KEY, JSON.stringify(result?.userData))
     dispatch(setIsUserLoggedIn(true))

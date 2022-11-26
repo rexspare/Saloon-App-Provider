@@ -37,7 +37,6 @@ const Verify = (props) => {
         handleLogin()
       } else {
         showFlash(result.data.message, 'danger', 'none')
-
       }
     } else {
       showFlash("Please Enter the OTP sent!", "warning", "auto")

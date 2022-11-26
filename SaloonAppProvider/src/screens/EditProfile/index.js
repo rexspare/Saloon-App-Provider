@@ -34,7 +34,7 @@ import {
   import apiRequest from '../../Data/remote/Webhandler'
   import { showFlash } from '../../utils/MyUtils'
   import { useDispatch, useSelector } from 'react-redux';
-  import { setIsUserLoggedIn } from '../../Data/Local/Store/Actions';
+  import { setIsUserLoggedIn, setUser } from '../../Data/Local/Store/Actions';
   
   const EditProfile = props => {
     const { navigation, route } = props;
@@ -59,9 +59,6 @@ import {
     }, [])
   
 
-  
-
-  
     const handlecontinue = async () => {
      
       setisLoading(true)

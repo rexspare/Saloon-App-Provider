@@ -26,15 +26,11 @@ export default function AddServices(props) {
   const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
-
     getCat();
-
   }, [])
 
 
   const getCat = async () => {
-
-
     const result = await apiRequest({
       method: "POST",
       url: ROUTES.GET_VENDOR_SELECTED_CATEGORIES,
@@ -198,11 +194,11 @@ export default function AddServices(props) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Label style={styles.labelStyles}>Enter duration</Label>
+              <Label style={styles.labelStyles}>{`Enter duration(in minutes)`}</Label>
 
               <Auth_Input
-                placeholder={'Enter service duration i.e H:MM'}
-                numericKeyboard={true}
+                placeholder={'Enter service duration in MINUTES'}
+                numericKeyboard={false}
                 onChange={setServiceDuration}
               />
             </View>

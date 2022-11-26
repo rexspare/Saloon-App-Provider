@@ -8,10 +8,10 @@ import { Text_Button } from '../../components/Buttons'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MTCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { lang } from '../../assets/languages'   
-
-
+import { useSelector } from 'react-redux'
 
 const ViewProfile = (props) => {
+    const user = useSelector((state) => state.authReducer.user)
     return (
         <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
             <GoBackHeader onpress={() => props.navigation.goBack()} />
@@ -35,40 +35,40 @@ const ViewProfile = (props) => {
                     </View>
 
                     <View style={{ marginTop: FS_height(1.8) }}>
-                        <Label style={[styles.txtAlign]}>{lang._11}</Label>
-                        <Label style={[styles.txtAlign, styles.value]}>Moeed</Label>
+                        <Label style={[styles.txtAlign]}>Full name</Label>
+                        <Label style={[styles.txtAlign, styles.value]}>{user.username}</Label>
                     </View>
-                    <View style={{ marginTop: FS_height(1.8) }}>
+                    {/* <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._13}</Label>
                         <Label style={[styles.txtAlign, styles.value]}>Farooq</Label>
-                    </View>
+                    </View> */}
                     {/* Phone number */}
                     <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._17}</Label>
-                        <If condition={false}>
-                            <Label style={[styles.txtAlign, styles.value]}>Moeed</Label>
-                        </If>
                         <If condition={true}>
+                            <Label style={[styles.txtAlign, styles.value]}>{user.phone}</Label>
+                        </If>
+                        {/* <If condition={true}>
                             <Text_Button textStyles={[styles.btnTxt, { right: width * 0.35 }]}
                                 title="+Add" />
-                        </If>
+                        </If> */}
                     </View>
                     {/* Email */}
                     <View style={{ marginTop: FS_height(1.8) }}>
-                        <Label style={[styles.txtAlign]}>{lang._51}</Label>
-                        <Label style={[styles.txtAlign, styles.value]}>Moeedfarooq66@gmail.com</Label>
+                        <Label style={[styles.txtAlign]}>Email</Label>
+                        <Label style={[styles.txtAlign, styles.value]}>{user?.email}</Label>
                     </View>
 
                     {/* DOB */}
                     <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._49}</Label>
-                        <Label style={[styles.txtAlign, styles.value]}>10 Oct 1997</Label>
+                        <Label style={[styles.txtAlign, styles.value]}>{user?.primary_category}</Label>
                     </View>
 
                     {/* Gender */}
                     <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._50}</Label>
-                        <Label style={[styles.txtAlign, styles.value]}>Male</Label>
+                        <Label style={[styles.txtAlign, styles.value]}>{user?.secondary_category}</Label>
                     </View>
                 </View>
 
