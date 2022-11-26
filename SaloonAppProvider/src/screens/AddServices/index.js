@@ -74,6 +74,7 @@ export default function AddServices(props) {
 
   const handlecontinue = async () => {
     
+   if(user?.business_close_time && user?.business_lat && user?.business_open_time){
     setisLoading(true)
     if (serviceTitle != '' && serviceDescription != '' && gender !='' &&
       servicePrice != '' && serviceDuration != '' && selectedItem.length == 1) {
@@ -101,13 +102,18 @@ export default function AddServices(props) {
         props.navigation.goBack()
       } else {
         showFlash(result.data.message, 'danger', 'none')
-
       }
     } else {
       showFlash("Please enter all required data", "warning", "auto")
     }
     setisLoading(false)
 
+   } else {
+    showFlash("complete the vendor profile to add a service", 'warning', 'none')
+    console.log('====================================');
+    console.log(user);
+    console.log('====================================');
+   }
   }
 
 

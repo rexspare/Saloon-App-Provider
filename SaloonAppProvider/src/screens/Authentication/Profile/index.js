@@ -112,7 +112,6 @@ const dispatch = useDispatch()
           business_open_time: moment(businessOpenTime).format('H:mm'),
           business_close_time: moment(businessCloseTime).format('H:mm'),
           business_website: businessWebsite,
-
           business_lat: Coords.lat,
           business_long: Coords.long,
           primary_category: primaryCat,

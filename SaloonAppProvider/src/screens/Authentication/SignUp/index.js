@@ -109,7 +109,7 @@ const SignUp = (props) => {
               <Label style={styles.labelStyles}>{lang._17}</Label>
               <Phone_Input
                 onChange={setphone}
-
+                placeholder={"phone #"}
               />
 
             </View>
