@@ -3,7 +3,8 @@ import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
-
+  Image,
+  Alert
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CommonStyles from '../../assets/styles/CommonStyles';
@@ -30,13 +31,15 @@ import MyDateTimePicker from '../../components/MyDateTimePicker';
 import moment from 'moment'
 import { PERMISSIONS, checkMultiple, requestMultiple } from 'react-native-permissions';
 // import { ROUTES } from "../../../remote/Routes";
-import { ROUTES } from '../../Data/remote/Routes'
+import { BASE_URL, ROUTES } from '../../Data/remote/Routes'
 import apiRequest from '../../Data/remote/Webhandler'
 import { showFlash } from '../../utils/MyUtils'
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsUserLoggedIn, setUser } from '../../Data/Local/Store/Actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { storage_keys } from '../../utils/StorageKeys';
+import MTCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const EditProfile = props => {
   const { navigation, route } = props;
@@ -51,67 +54,114 @@ const EditProfile = props => {
   const [userPhone, setUserPhone] = useState('')
   const [isOpenTimeModalVisible, setOpenTimeModalVisible] = useState(false);
   const [isCloseTimeModalVisible, setCloseTimeModalVisible] = useState(false);
-
   const [Coords, setCoords] = useState({})
 
+  const [user_image, setuser_image] = useState(user?.user_image)
+  const [imageObject, setimageObject] = useState({})
   const dispatch = useDispatch()
+
+  const handlePickImage = () => {
+    Alert.alert(
+      'Change Image',
+      "Select an Image from",
+      [
+        {
+          text: "Cancel",
+          onPress: () => { },
+        },
+        {
+          text: "Camera",
+          onPress: () => { openCamera() },
+        },
+        {
+          text: "Gallery",
+          onPress: () => { openGallery() },
+        }
+      ]
+    );
+  }
+
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      setimageObject(image)
+    }).catch(() => {})
+  }
+
+  const openGallery = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true
+    }).then(image => {
+      setimageObject(image)
+    }).catch(() => {})
+  }
+
 
   useEffect(() => {
     setLocationPermission()
   }, [])
 
+  let avatar = user?.user_image ?
+    user?.user_image?.includes('http') ?
+      user?.user_image :
+      BASE_URL + "uploads/" + user?.user_image
+    :
+    "https://www.w3schools.com/w3images/avatar2.png"
 
   const handlecontinue = async () => {
 
     setisLoading(true)
     if (userName != '' && userEmail != '' && userPhone != '' && business != '' && businessWebsite != '' && businessOpenTime != null
       && businessCloseTime != null && Coords?.lat) {
-      const result = await apiRequest({
-        method: "post",
-        url: ROUTES.UPDATE_PROFILE,
-
-        data: {
-          username: userName,
-          email: userEmail,
-          phone: userPhone,
-          token: user.token,
-          business_name: business,
-          business_open_time: moment(businessOpenTime).format('H:mm'),
-          business_close_time: moment(businessCloseTime).format('H:mm'),
-          business_website: businessWebsite,
-          business_lat: Coords.lat,
-          business_long: Coords.long,
-          user_id: user.id
+        let form = new FormData()
+        form.append('username', userName);
+        form.append('email', userPhone);
+        form.append('phone', userPhone);
+        form.append('token', user?.token);
+        form.append('user_id', user?.id);
+        form.append('business_name', business);
+        form.append('business_open_time', moment(businessOpenTime).format('H:mm'));
+        form.append('business_close_time', moment(businessCloseTime).format('H:mm'));
+        form.append('business_website', businessWebsite);
+        form.append('business_lat', Coords.lat);
+        form.append('business_long', Coords.long);
+    
+        if (imageObject?.path) {
+            form.append('user_image',
+                { uri: imageObject?.path, type: imageObject?.mime, mime: imageObject?.mime, name: 'profile.png' })
         }
 
-      }).catch((err) => {
-        showFlash("Somehomg Went Wrong", "danger", 'auto')
-        setisLoading(false)
-      });
-      if (result?.data?.status) {
-        let mUser = {
-          username: userName,
-          email: userEmail,
-          phone: userPhone,
-          token: user.token,
-          business_name: business,
-          business_open_time: moment(businessOpenTime).format('H:mm'),
-          business_close_time: moment(businessCloseTime).format('H:mm'),
-          business_website: businessWebsite,
-          business_lat: Coords.lat,
-          business_long: Coords.long,
-          user_id: user.id
-        }
-        dispatch(setUser({ ...user, ...mUser }))
-        showFlash(result.data.message, 'success', 'none')
-        AsyncStorage.setItem(storage_keys.USER_DATA_KEY, JSON.stringify({ ...user, ...mUser }))
-          .then(() => {
-            navigation.goBack()
-          })
-      } else {
-        showFlash(result.data.message, 'danger', 'none')
+       const result = await fetch(BASE_URL + ROUTES.UPDATE_PROFILE, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+            },
+            body: form
+        })
+            .then((response) => response.json())
+            .then((json) => {
+              setisLoading(false)
+                return json
+            })
+            .catch((error) => {
+                console.error(error);
+            });
 
-      }
+            if (result?.status) {
+              showFlash(result?.message, 'success', 'none')
+              dispatch(setUser(result?.data))
+              AsyncStorage.setItem(storage_keys.USER_DATA_KEY,
+                  JSON.stringify(result?.data))
+                  .then(() => { navigation.goBack() })
+          } else {
+              showFlash(result?.message, 'danger', 'none')
+          }
     } else {
       showFlash("Please enter all required data", "warning", "auto")
     }
@@ -168,6 +218,19 @@ const EditProfile = props => {
 
         <View style={{}}>
           {/*  ==============   SECTION 1   =================== */}
+          <View style={styles.topContainer}>
+            <TouchableOpacity activeOpacity={0.9} onPress={() => handlePickImage()}>
+              <Image source={{
+                uri: imageObject?.path ?
+                  imageObject?.path :
+                  avatar
+              }}
+                style={styles.image} />
+              <View style={styles.editIcon}>
+                <MTCIcons name='pencil-outline' size={FS_val(14, 700)} color={COLORS.pure_White} />
+              </View>
+            </TouchableOpacity>
+          </View>
           <View style={styles.HeaderContainer}>
             <Heading
               style={{
@@ -322,7 +385,7 @@ const styles = StyleSheet.create({
     width: width,
     // borderWidth:2,
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 10,
   },
 
   labelStyles: {
@@ -366,7 +429,51 @@ const styles = StyleSheet.create({
     marginEnd: 5,
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  topContainer: {
+    width: width,
+    height: height * 0.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10
+  },
+  imageContainer: {
+    width: width * 0.38,
+    height: width * 0.38,
+    borderRadius: width * 0.2,
+    borderColor: "#1e7bd6",
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+  image: {
+    width: width * 0.36,
+    maxWidth: 200,
+    height: width * 0.36,
+    maxHeight: 200,
+    borderRadius: width * 0.2,
+  },
+  editIcon: {
+    width: width * 0.07,
+    maxWidth: 25,
+    height: width * 0.07,
+    maxHeight: 25,
+    borderRadius: width * 0.05,
+    backgroundColor: COLORS.Links,
+    position: "absolute",
+    bottom: '5%',
+    right: '3%',
+    borderWidth: 1.5,
+    borderColor: COLORS.pure_White,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  editProfileHeader: {
+    flexDirection: "row",
+    paddingHorizontal: "5%",
+    justifyContent: "space-between",
+    alignItems: 'center',
+  },
 });
 
 export default EditProfile;

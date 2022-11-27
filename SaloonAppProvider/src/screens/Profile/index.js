@@ -16,6 +16,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import commonStyles from '../../assets/styles/CommonStyles'
 import { Text_Button } from '../../components/Buttons'
+import { BASE_URL} from '../../Data/remote/Routes'
 
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -77,21 +78,26 @@ export default function ProfileMain(props) {
     console.log(user.username);
     },[])
 
-
+    let avatar = user?.user_image ?
+    user?.user_image?.includes('http') ?
+        user?.user_image :
+        BASE_URL + "uploads/" + user?.user_image
+    :
+    "https://www.w3schools.com/w3images/avatar2.png"
 
     return (
       <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
         <Layout fixed={false}>
           {/* Header */}
           <View style={styles.topContainer}>
-            {/* <View style={styles.imageContainer}>
-              <Image source={{ uri: "https://picsum.photos/200/300" }}
-                style={styles.image} />
-            </View> */}
-            <Heading style={{ fontSize: FS_height(3.5) }}>{user.username}</Heading>
-            <Text_Button title={lang._51} textStyles={styles.viewProfile}
-              onpress={() => props.navigation.navigate("ViewProfile")} />
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: avatar }}
+              style={styles.image} />
           </View>
+          <Heading style={{ fontSize: FS_height(3.5), marginTop: '3%' }}>{user.username}</Heading>
+          <Text_Button title={"View Profile"} textStyles={styles.viewProfile}
+            onpress={() => props.navigation.navigate("ViewProfile")} />
+        </View>
           {/* List Items */}
           {
             Menu.map((item) => (
@@ -111,7 +117,7 @@ export default function ProfileMain(props) {
 const styles = StyleSheet.create({
   topContainer: {
     width: width,
-    height: height * 0.20,
+    height: height * 0.41,
     justifyContent: "space-evenly",
     alignItems: 'center',
     paddingTop: "10%",
@@ -128,10 +134,10 @@ const styles = StyleSheet.create({
   },
   image: {
     width: width * 0.37 - 10,
-    maxWidth: 100,
+    maxWidth: 200,
     height: width * 0.37 - 10,
-    maxHeight: 100,
-    borderRadius: width * 0.1,
+    maxHeight: 200,
+    borderRadius: width * 0.2,
   },
   viewProfile: {
     color: COLORS.Links,

@@ -62,7 +62,10 @@ const AuthScreen = (props) => {
   const GoogleSignUp = async () => {
     setisLoading(true)
     try {
-      await GoogleSignin.revokeAccess()
+      let issignedIn = await GoogleSignin.isSignedIn()
+      if (issignedIn) {
+        await GoogleSignin.revokeAccess()
+      }
       const onesignalData = await OneSignal.getDeviceState(); 
       await GoogleSignin.hasPlayServices();
       await GoogleSignin.signIn().then(async (result) => {

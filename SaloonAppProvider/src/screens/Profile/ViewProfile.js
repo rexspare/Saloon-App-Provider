@@ -12,23 +12,27 @@ import { useSelector } from 'react-redux'
 
 const ViewProfile = (props) => {
     const user = useSelector((state) => state.authReducer.user)
+    
+    let avatar = user?.user_image ?
+    user?.user_image?.includes('http') ?
+        user?.user_image :
+        BASE_URL + "uploads/" + user?.user_image
+    :
+    "https://www.w3schools.com/w3images/avatar2.png"
     return (
         <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
             <GoBackHeader onpress={() => props.navigation.goBack()} />
             <Layout fixed={false}>
                 {/* Image Container */}
-                {/* <View style={styles.topContainer}>
+                <View style={styles.topContainer}>
                     <TouchableOpacity activeOpacity={0.9}>
-                        <Image source={{ uri: "https://picsum.photos/200/300" }}
+                        <Image source={{ uri: avatar}}
                             style={styles.image} />
-                        <View style={styles.editIcon}>
-                            <MTCIcons name='pencil-outline' size={FS_val(14, 700)} color={COLORS.pure_White} />
-                        </View>
                     </TouchableOpacity>
-                </View> */}
+                </View>
 
                 {/* Body */}
-                <View style={{ backgroundColor: COLORS.primary }}>
+                <View style={{ backgroundColor: COLORS.primary , marginBottom:30}}>
                     <View style={styles.editProfileHeader}>
                         <Heading>{`My Profile`}</Heading>
                        
@@ -59,16 +63,31 @@ const ViewProfile = (props) => {
                         <Label style={[styles.txtAlign, styles.value]}>{user?.email}</Label>
                     </View>
 
-                    {/* DOB */}
+                    
                     <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._49}</Label>
                         <Label style={[styles.txtAlign, styles.value]}>{user?.primary_category}</Label>
                     </View>
 
-                    {/* Gender */}
+                    
                     <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._50}</Label>
                         <Label style={[styles.txtAlign, styles.value]}>{user?.secondary_category}</Label>
+                    </View>
+
+                    <View style={{ marginTop: FS_height(1.8) }}>
+                        <Label style={[styles.txtAlign]}>{'Opening time'}</Label>
+                        <Label style={[styles.txtAlign, styles.value]}>{user?.business_open_time}</Label>
+                    </View>
+
+                    <View style={{ marginTop: FS_height(1.8) }}>
+                        <Label style={[styles.txtAlign]}>{'Closing time'}</Label>
+                        <Label style={[styles.txtAlign, styles.value]}>{user?.business_close_time}</Label>
+                    </View>
+
+                    <View style={{ marginTop: FS_height(1.8) }}>
+                        <Label style={[styles.txtAlign]}>{'website'}</Label>
+                        <Label style={[styles.txtAlign, styles.value]}>{user?.business_website}</Label>
                     </View>
                 </View>
 
