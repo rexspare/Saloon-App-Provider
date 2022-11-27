@@ -12,19 +12,26 @@ import { getPendingBookingHistory } from '../../Data/Local/Store/Actions';
 
 
 
-export default function PendingOrders() {
+export default function PendingOrders(props) {
+  const {navigation} = props
 
   const allPendingOrders = useSelector((state) => state.authReducer.allPendingOrders)
   const user = useSelector((state) => state.authReducer.user)
   const dispatch = useDispatch()
 
+  // useEffect(() => {
+  //   dispatch(getPendingBookingHistory(user?.id))
+  // }, [])
   useEffect(() => {
-    dispatch(getPendingBookingHistory(user?.id))
-  }, [])
+    const unsubsribe = navigation.addListener("focus", () => {
+      dispatch(getPendingBookingHistory(user?.id))
+    });
+    return unsubsribe;
+  }, []);
   
 
   const updatePendingStatus = async (status,booking_id,player_id , title) => {
-    console.log("status + booking" , status, booking_id)
+    console.log("status + booking" , status, booking_id, player_id)
 
     const result = await apiRequest({
       method: "POST",
@@ -41,13 +48,20 @@ export default function PendingOrders() {
       if(player_id){
         const notificationResponse = await apiRequest({
             method: "post",
-            url: ROUTES.SEND_PROVIDER_NOTIFICATION,
+            url: ROUTES.SEND_USER_NOTIFICATION,
             data: {
                 player_id :player_id,
                 message : `Your booking for ${title} has been ${status} by ${user?.username}`
             }
         }).catch((err) => {
+          
+          console.log('====================================');
+          console.log(err);
+          console.log('====================================');
         });
+        console.log('====================================');
+        console.log(notificationResponse.data);
+        console.log('====================================');
     }
     }
     else {

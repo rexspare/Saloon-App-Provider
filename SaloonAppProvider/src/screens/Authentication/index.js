@@ -62,11 +62,12 @@ const AuthScreen = (props) => {
   const GoogleSignUp = async () => {
     setisLoading(true)
     try {
+      const data = await OneSignal.getDeviceState();
+      const player_id = data?.userId;
       let issignedIn = await GoogleSignin.isSignedIn()
       if (issignedIn) {
         await GoogleSignin.revokeAccess()
       }
-      const onesignalData = await OneSignal.getDeviceState(); 
       await GoogleSignin.hasPlayServices();
       await GoogleSignin.signIn().then(async (result) => {
         const response = await dispatch(
@@ -75,13 +76,10 @@ const AuthScreen = (props) => {
             username: result.user?.name,
             role: 'vendor',
             googleID: result.user?.id,
-            player_id: onesignalData?.userId
+            player_id: player_id
           },
             () => { })
         );
-        console.log('====================================');
-        console.log(response.userData);
-        console.log('====================================');
         if (response.authenticity === true) {
           if (response?.userData?.role  == 'vendor') {
               callBack(response)
@@ -89,6 +87,26 @@ const AuthScreen = (props) => {
           } else {
              showFlash("Customer Profile cannot log into vendor app", 'warning', 'none')
           }
+        } else if(response.authenticity === false && response.status === true){
+          const response_ = await dispatch(
+            registerUser({
+              email: result.user?.email,
+              username: result.user?.name,
+              role: 'customer',
+              googleID: result.user?.id,
+              player_id: player_id,
+              user_image_url: result?.user?.photo || ""
+            },
+              (result) => { })
+          );
+          if (response_.authenticity === true) {
+            if (response_?.userData?.role != "vendor") {
+              callBack(response_)
+            } else {
+              showFlash("Vendor cannot loggin in user app!", "danger", 'none')
+            }
+  
+          } 
         }
       });
     } catch (error) {

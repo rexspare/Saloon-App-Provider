@@ -53,14 +53,10 @@ export default function AddServices(props) {
   const getSelectedItem = (item) => selectedItem.includes(item.category_id)
 
   const handleOnPress = (item) => {
-
-
-
     if (selectedItem.length < 1) {
       setSelectedItem([item.category_id])
       return
     }
-
     if (selectedItem.length == 1) {
       if (selectedItem.includes(item.category_id)) {
         const newList = selectedItem.filter(catId => catId !== item.category_id)
@@ -77,7 +73,7 @@ export default function AddServices(props) {
    if(user?.business_close_time && user?.business_lat && user?.business_open_time){
     setisLoading(true)
     if (serviceTitle != '' && serviceDescription != '' && gender !='' &&
-      servicePrice != '' && serviceDuration != '' && selectedItem.length == 1) {
+      servicePrice != '' && serviceDuration != '' && selectedItem.length  > 0) {
       const result = await apiRequest({
         method: "post",
         url: ROUTES.ADD_VENDOR_SERVICE,

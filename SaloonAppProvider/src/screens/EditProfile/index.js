@@ -343,7 +343,7 @@ const EditProfile = props => {
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{lang._41}</Label>
 
-              <View
+              <TouchableOpacity onPress={() => setOpenTimeModalVisible(true)}
                 style={[
                   styles.pickerContainer,
                   {
@@ -359,13 +359,13 @@ const EditProfile = props => {
                     {businessOpenTime ? moment(businessOpenTime).format('H:mm') : lang._43}
                   </Text_type1>
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{lang._42}</Label>
 
-              <View
+              <TouchableOpacity  onPress={() => setCloseTimeModalVisible(true)}
                 style={[
                   styles.pickerContainer,
                   {
@@ -383,7 +383,7 @@ const EditProfile = props => {
                     {businessCloseTime ? moment(businessCloseTime).format('H:mm') : lang._43}
                   </Text_type1>
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.inputContainer}>
@@ -398,7 +398,8 @@ const EditProfile = props => {
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{lang._46}</Label>
 
-              <View
+              <TouchableOpacity
+                  onPress={() => navigation.navigate('EditLocation', { setCoords: setCoords })}
                 style={[
                   styles.pickerContainer,
                   {
@@ -416,7 +417,7 @@ const EditProfile = props => {
                     {Coords?.address ? Coords?.address : `${lang._43}`}
                   </Text_type1>
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.inputContainer}>
