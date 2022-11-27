@@ -110,7 +110,6 @@ const AuthScreen = (props) => {
   };
 
   const callBack = (result) => {
-    alert(JSON.stringify(result?.userData))
     dispatch(setUser(result?.userData))
     AsyncStorage.setItem(storage_keys.USER_DATA_KEY, JSON.stringify(result?.userData))
     dispatch(setIsUserLoggedIn(true))

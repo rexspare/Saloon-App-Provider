@@ -4,7 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert
+  Alert,
+  ScrollView
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CommonStyles from '../../assets/styles/CommonStyles';
@@ -55,7 +56,9 @@ const EditProfile = props => {
   const [isOpenTimeModalVisible, setOpenTimeModalVisible] = useState(false);
   const [isCloseTimeModalVisible, setCloseTimeModalVisible] = useState(false);
   const [Coords, setCoords] = useState({})
-
+  const [selectedItem, setSelectedItem] = useState([])
+  const [secondarySelectedItem, setSecondarySelectedItem] = useState([])
+  const [vendorCategories, setVendorCategories] = useState('')
   const [user_image, setuser_image] = useState(user?.user_image)
   const [imageObject, setimageObject] = useState({})
   const dispatch = useDispatch()
@@ -104,7 +107,46 @@ const EditProfile = props => {
 
   useEffect(() => {
     setLocationPermission()
+    getCat();
+
   }, [])
+
+  const getCat = async () => {
+
+
+    const result = await apiRequest({
+      method: "GET",
+      url: ROUTES.GET_CATEGORIES,
+    }).catch((err) => {
+      showFlash("Network Error", "danger", 'auto',)
+      return false;
+    });
+    if (result.data.status) {
+      setVendorCategories(result.data)
+    }
+    else {
+    }
+  }
+
+  const handleOnPress = (item, checkClickedCategory) => {
+
+    var itemSelected = checkClickedCategory == 'Primary' ? selectedItem : secondarySelectedItem
+    var setItemSelected = checkClickedCategory == 'Primary' ? setSelectedItem : setSecondarySelectedItem
+
+    if (itemSelected.includes(item.category_name)) {
+      const newList = itemSelected.filter(catName => catName !== item.category_name)
+      return setItemSelected(newList)
+    }
+    setItemSelected([...itemSelected, item.category_name])
+  }
+
+  const getSelectedItem = (item, checkClickedCategory) => {
+
+    var itemSelected = checkClickedCategory == 'Primary' ? selectedItem : secondarySelectedItem
+    return itemSelected.includes(item.category_name)
+
+  }
+
 
   let avatar = user?.user_image ?
     user?.user_image?.includes('http') ?
@@ -114,10 +156,14 @@ const EditProfile = props => {
     "https://www.w3schools.com/w3images/avatar2.png"
 
   const handlecontinue = async () => {
-
+    console.log('====================================');
+    console.log(user);
+    console.log('====================================');
+    let primaryCat = selectedItem.join();
+    let secondaryCat = secondarySelectedItem.join()
     setisLoading(true)
     if (userName != '' && userEmail != '' && userPhone != '' && business != '' && businessWebsite != '' && businessOpenTime != null
-      && businessCloseTime != null && Coords?.lat) {
+      && businessCloseTime != null && Coords?.lat && primaryCat?.length > 0 && secondaryCat?.length > 0) {
         let form = new FormData()
         form.append('username', userName);
         form.append('email', userPhone);
@@ -135,6 +181,26 @@ const EditProfile = props => {
             form.append('user_image',
                 { uri: imageObject?.path, type: imageObject?.mime, mime: imageObject?.mime, name: 'profile.png' })
         }
+        const result_ = await apiRequest({
+          method: "post",
+          url: ROUTES.CREATE_VENDOR_PROFILE,
+  
+          data: {
+            business_name: business,
+            business_open_time: moment(businessOpenTime).format('H:mm'),
+            business_close_time: moment(businessCloseTime).format('H:mm'),
+            business_website: businessWebsite,
+            business_lat: Coords.lat,
+            business_long: Coords.long,
+            primary_category: primaryCat,
+            secondary_category: secondaryCat,
+            user_id: user.id
+          }
+  
+        }).catch((err) => {
+          showFlash("Somehomg Went Wrong", "danger", 'auto')
+          setisLoading(false)
+        }); 
 
        const result = await fetch(BASE_URL + ROUTES.UPDATE_PROFILE, {
             method: 'POST',
@@ -155,6 +221,9 @@ const EditProfile = props => {
 
             if (result?.status) {
               showFlash(result?.message, 'success', 'none')
+              console.log('====================================');
+              console.log(result.data);
+              console.log('====================================');
               dispatch(setUser(result?.data))
               AsyncStorage.setItem(storage_keys.USER_DATA_KEY,
                   JSON.stringify(result?.data))
@@ -348,6 +417,65 @@ const EditProfile = props => {
                   </Text_type1>
                 </TouchableOpacity>
               </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Label style={styles.labelStyles}>{lang._49}</Label>
+              <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false} >
+                <View style={{ flexDirection: 'row' }} >
+                  {
+                    vendorCategories?.categories?.map((categories, index) => {
+                      return (
+                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories, 'Primary') ? '#679f58' : COLORS.pure_Black }]}
+                          key={index}
+                          onPress={() => handleOnPress(categories, 'Primary')} >
+
+                          <Text_type1
+                            style={{ alignSelf: 'center', fontSize: 14 }}
+                            color={COLORS.pure_White}>
+                            {categories?.category_name}
+                          </Text_type1>
+
+
+                        </TouchableOpacity>
+
+
+                      )
+                    })
+                  }
+                </View>
+              </ScrollView>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Label style={styles.labelStyles}>{lang._50}</Label>
+
+              <ScrollView style={{ marginHorizontal: 20 }} horizontal={true} showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false} >
+                <View style={{ flexDirection: 'row' }} >
+                  {
+                    vendorCategories?.categories?.map((categories, index) => {
+                      return (
+                        <TouchableOpacity style={[styles.catBg, { backgroundColor: getSelectedItem(categories, 'Secondary') ? '#679f58' : COLORS.pure_Black }]}
+                          key={index}
+                          onPress={() => handleOnPress(categories, 'Secondary')} >
+
+                          <Text_type1
+                            style={{ alignSelf: 'center', fontSize: 14 }}
+                            color={COLORS.pure_White}>
+                            {categories?.category_name}
+                          </Text_type1>
+
+
+                        </TouchableOpacity>
+
+
+                      )
+                    })
+                  }
+                </View>
+              </ScrollView>
             </View>
 
 
