@@ -41,18 +41,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { storage_keys } from '../../utils/StorageKeys';
 import MTCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker';
+import Geocoder from 'react-native-geocoder';
 
 const EditProfile = props => {
   const { navigation, route } = props;
   const user = useSelector((state) => state.authReducer.user)
-  const [business, setBusinessName] = useState('');
-  const [businessWebsite, setBusinessWebsite] = useState('');
+  const [business, setBusinessName] = useState(user?.business_name || '');
+  const [businessWebsite, setBusinessWebsite] = useState(user?.business_website || '');
   const [businessOpenTime, setBusinessOpenTime] = useState(null)
   const [businessCloseTime, setBusinessCloseTime] = useState(null);
   const [isLoading, setisLoading] = useState(false);
-  const [userName, setUserName] = useState('')
-  const [userEmail, setUserEmail] = useState('')
-  const [userPhone, setUserPhone] = useState('')
+  const [userName, setUserName] = useState(user?.username|| '')
+  const [userEmail, setUserEmail] = useState(user?.email || '')
+  const [userPhone, setUserPhone] = useState(user?.phone|| '')
   const [isOpenTimeModalVisible, setOpenTimeModalVisible] = useState(false);
   const [isCloseTimeModalVisible, setCloseTimeModalVisible] = useState(false);
   const [Coords, setCoords] = useState({})
@@ -108,7 +109,12 @@ const EditProfile = props => {
   useEffect(() => {
     setLocationPermission()
     getCat();
-
+    console.log('====================================');
+    console.log(user);
+    console.log('====================================');
+    if(user?.business_lat){
+      getGeoCodePosition(parseFloat(user?.business_lat), parseFloat(user?.business_long))
+    }
   }, [])
 
   const getCat = async () => {
@@ -265,6 +271,15 @@ const EditProfile = props => {
         console.log(JSON.stringify(error));
       });
   }
+  const getGeoCodePosition = (latitude, longitude) => {
+    Geocoder.geocodePosition({
+        lat: latitude,
+        lng: longitude
+    }).then(res => {
+        setCoords({lat : latitude, long : longitude, address: res[0].formattedAddress})
+    })
+        .catch(() => showFlash("Error getting location", 'danger', 'none'))
+}
 
   return (
     <View style={CommonStyles.container}>
@@ -319,25 +334,26 @@ const EditProfile = props => {
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{'Name'}</Label>
 
-              <Auth_Input placeholder={'Enter your name'} onChange={setUserName} />
+              <Auth_Input placeholder={'Enter your name'} onChange={setUserName} value={userName}/>
             </View>
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{'Email'}</Label>
 
-              <Auth_Input placeholder={'Enter your email'} onChange={setUserEmail} />
+              <Auth_Input placeholder={'Enter your email'} onChange={setUserEmail} value={userEmail}/>
             </View>
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{'Phone'}</Label>
 
-              <Auth_Input placeholder={'Enter your phone no.'} onChange={setUserPhone} numericKeyboard={true} />
+              <Auth_Input placeholder={'Enter your phone no.'} onChange={setUserPhone} 
+              value={userPhone}/>
             </View>
 
             <View style={styles.inputContainer}>
               <Label style={styles.labelStyles}>{lang._39}</Label>
 
-              <Auth_Input placeholder={lang._40} onChange={setBusinessName} />
+              <Auth_Input placeholder={lang._40} onChange={setBusinessName} value={business}/>
             </View>
 
             <View style={styles.inputContainer}>
@@ -390,6 +406,7 @@ const EditProfile = props => {
               <Label style={styles.labelStyles}>{lang._44}</Label>
 
               <Auth_Input
+              value={businessWebsite}
                 placeholder={lang._45}
                 onChange={setBusinessWebsite}
               />

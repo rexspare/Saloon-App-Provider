@@ -23,7 +23,7 @@ export default function Location(props) {
 
     const getGeoCodePosition = (latitude, longitude) => {
         Geocoder.geocodePosition({
-            lat: latitude,
+            lat: latitude, 
             lng: longitude
         }).then(res => {
             setsearchInput(res[0].formattedAddress)

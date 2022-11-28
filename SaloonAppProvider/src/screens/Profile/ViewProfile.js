@@ -9,6 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MTCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { lang } from '../../assets/languages'   
 import { useSelector } from 'react-redux'
+import { BASE_URL} from '../../Data/remote/Routes'
 
 const ViewProfile = (props) => {
     const user = useSelector((state) => state.authReducer.user)
