@@ -100,10 +100,10 @@ const AuthScreen = (props) => {
               (result) => { })
           );
           if (response_.authenticity === true) {
-            if (response_?.userData?.role != "vendor") {
+            if (response_?.userData?.role == "vendor") {
               callBack(response_)
             } else {
-              showFlash("Vendor cannot loggin in user app!", "danger", 'none')
+              showFlash("Customer cannot loggin in business app!", "danger", 'none')
             }
   
           } 
