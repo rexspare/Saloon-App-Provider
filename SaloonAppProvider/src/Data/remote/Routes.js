@@ -20,7 +20,11 @@ const ROUTES = {
     REVIEWS: "get-reviews",
     SEND_USER_NOTIFICATION: "send-user-notification",
     SEND_PROVIDER_NOTIFICATION: 'send-provider-notification',
-    USER_IS_NOTIFY : 'user-is-notify'
+    USER_IS_NOTIFY: 'user-is-notify',
+    UPLOAD_GALLERY_IMAGES: 'upload-gallery-images',
+    GET_GALLERY_IMAGE: 'get-gallery-images',
+    DELETE_GALLERY_IMAGES: "delete-gallery-images",
+    DELETE_USER_ACCOUNT: "delete-user-account"
 }
 
 export {

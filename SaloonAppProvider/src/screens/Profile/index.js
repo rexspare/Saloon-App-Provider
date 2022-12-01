@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import React, {useEffect} from 'react'
 import { Auth_Button } from '../../components/Buttons'
-import { setIsUserLoggedIn } from '../../Data/Local/Store/Actions'
+import { setIsUserLoggedIn, setUser } from '../../Data/Local/Store/Actions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { storage_keys } from '../../utils/StorageKeys'
 import CommonStyles from '../../assets/styles/CommonStyles'
@@ -54,6 +54,12 @@ const Menu = [
   },
   {
     id: 6,
+    title: "Business Gallery",
+    Icon: <Feather name='camera' size={FS_height(3.5)} color={COLORS.secondary} />,
+    route: "Gallery"
+  },
+  {
+    id: 7,
     title: "Log out",
     Icon: <Feather name='log-out' size={FS_height(3.5)} color={COLORS.secondary} />,
     route: "Logout"

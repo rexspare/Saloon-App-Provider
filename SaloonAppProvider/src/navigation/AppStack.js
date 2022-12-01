@@ -18,6 +18,7 @@ import Reviews from '../screens/Reviews';
 import TermsConditions from '../screens/About/TermsConditions'
 import PrivacyPolicy from '../screens/About/PrivacyPolicy'
 import ChangePassword from '../screens/Setting/ChangePassword';
+import Gallery from '../screens/Gallery';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,7 @@ export default function AppStack() {
       <Stack.Screen name='Terms' component={TermsConditions} />
       <Stack.Screen name='Privacy' component={PrivacyPolicy} />
       <Stack.Screen name='ChangePassword' component={ChangePassword} />
+      <Stack.Screen name='Gallery' component={Gallery} />
 
       {/* ADD YOURSCREEN HERE */}
     </Stack.Navigator>

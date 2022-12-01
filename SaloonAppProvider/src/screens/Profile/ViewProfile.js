@@ -1,25 +1,61 @@
-import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 import GoBackHeader from '../../components/GoBackHeader'
-import {  Heading, If, Label, Layout, MenuItem, Text_type1 } from '../../components'
+import { Heading, If, Label, Layout, MenuItem, Text_type1 } from '../../components'
 import commonStyles from '../../assets/styles/CommonStyles'
 import { COLORS, FONTS, FS_height, FS_val, height, width } from '../../utils/Common'
 import { Text_Button } from '../../components/Buttons'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MTCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { lang } from '../../assets/languages'   
-import { useSelector } from 'react-redux'
-import { BASE_URL} from '../../Data/remote/Routes'
+import { lang } from '../../assets/languages'
+import { useSelector, useDispatch } from 'react-redux'
+import { BASE_URL, ROUTES } from '../../Data/remote/Routes'
+import apiRequest from '../../Data/remote/Webhandler'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { storage_keys } from '../../utils/StorageKeys'
+import { setIsUserLoggedIn, setUser } from '../../Data/Local/Store/Actions'
+
 
 const ViewProfile = (props) => {
     const user = useSelector((state) => state.authReducer.user)
-    
+    const dispatch = useDispatch();
+
+    const handleDelete = async () => {
+        const result = await apiRequest({
+            method: "POST",
+            url: ROUTES.DELETE_USER_ACCOUNT,
+            data: {
+                user_id: user?.id,
+                email: user?.email
+            }
+        }).catch((err) => {
+            showFlash("Network Error", "danger", 'auto',)
+            return false;
+        });
+        console.log(result.data);
+        if (result.data.status) {
+            showFlash("User and their data deleted successfully", "danger", 'auto',)
+            AsyncStorage.removeItem(storage_keys.USER_DATA_KEY)
+                .then(() => {
+                    dispatch(setIsUserLoggedIn(false))
+                    dispatch(setUser({}))
+                    props.navigation.goBack()
+                })
+        }
+        else {
+            showFlash("Error deleting user, please try again", "danger", 'auto',)
+        }
+    }
+
+
     let avatar = user?.user_image ?
-    user?.user_image?.includes('http') ?
-        user?.user_image :
-        BASE_URL + "uploads/" + user?.user_image
-    :
-    "https://www.w3schools.com/w3images/avatar2.png"
+        user?.user_image?.includes('http') ?
+            user?.user_image :
+            BASE_URL + "uploads/" + user?.user_image
+        :
+        "https://www.w3schools.com/w3images/avatar2.png"
+
+
     return (
         <SafeAreaView style={[commonStyles.container, { backgroundColor: COLORS.primary }]}>
             <GoBackHeader onpress={() => props.navigation.goBack()} />
@@ -27,16 +63,16 @@ const ViewProfile = (props) => {
                 {/* Image Container */}
                 <View style={styles.topContainer}>
                     <TouchableOpacity activeOpacity={0.9}>
-                        <Image source={{ uri: avatar}}
+                        <Image source={{ uri: avatar }}
                             style={styles.image} />
                     </TouchableOpacity>
                 </View>
 
                 {/* Body */}
-                <View style={{ backgroundColor: COLORS.primary , marginBottom:30}}>
+                <View style={{ backgroundColor: COLORS.primary, marginBottom: 30 }}>
                     <View style={styles.editProfileHeader}>
                         <Heading>{`My Profile`}</Heading>
-                       
+
                     </View>
 
                     <View style={{ marginTop: FS_height(1.8) }}>
@@ -64,13 +100,13 @@ const ViewProfile = (props) => {
                         <Label style={[styles.txtAlign, styles.value]}>{user?.email}</Label>
                     </View>
 
-                    
+
                     <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._49}</Label>
                         <Label style={[styles.txtAlign, styles.value]}>{user?.primary_category}</Label>
                     </View>
 
-                    
+
                     <View style={{ marginTop: FS_height(1.8) }}>
                         <Label style={[styles.txtAlign]}>{lang._50}</Label>
                         <Label style={[styles.txtAlign, styles.value]}>{user?.secondary_category}</Label>
@@ -92,6 +128,40 @@ const ViewProfile = (props) => {
                     </View>
                 </View>
 
+                <View style={styles.sectionBreak}></View>
+
+                {/* DELETE ACCOUNT */}
+                <View style={{ backgroundColor: COLORS.primary, paddingTop: 10 }}>
+                    <View style={[styles.editProfileHeader, { justifyContent: "flex-start" }]}>
+                        <Heading>{lang._56}</Heading>
+                    </View>
+
+                    <Label style={[styles.value,
+                    { marginVertical: FS_height(1), paddingHorizontal: '5%', textAlign: "left", fontSize: FS_height(2.4) }]}>
+                        {lang._57}</Label>
+
+                    <Text_Button style={styles.deleteBtn} textStyles={styles.deleteTxt}
+                        title={lang._58}
+                        onpress={() => {
+                            Alert.alert(
+                                "Dangerous action",
+                                "This actions is irreversible",
+                                [
+                                    {
+                                        text: "Cancel",
+                                        onPress: () => { },
+                                    },
+                                    {
+                                        text: "Delete",
+                                        onPress: () => { handleDelete() },
+                                    },
+                                ]
+                            )
+                        }}
+                    />
+
+                </View>
+
 
 
             </Layout>
@@ -106,7 +176,7 @@ const styles = StyleSheet.create({
         width: width,
         height: height * 0.3,
         ...commonStyles._center,
-        marginTop :-12
+        marginTop: -12
     },
     imageContainer: {
         width: width * 0.38,
@@ -159,13 +229,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#f4f3f8",
         marginTop: FS_height(1.8)
     },
-    deleteBtn :{
-        alignSelf:"flex-start",
-        paddingLeft:"5%",
-        marginBottom:FS_height(3)
+    deleteBtn: {
+        alignSelf: "flex-start",
+        paddingLeft: "5%",
+        marginBottom: FS_height(3)
     },
-    deleteTxt :{
-        color:"#c43059",
+    deleteTxt: {
+        color: "#c43059",
         fontSize: FS_height(2.7)
     }
 })

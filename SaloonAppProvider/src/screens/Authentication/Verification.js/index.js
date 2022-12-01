@@ -34,7 +34,8 @@ const Verify = (props) => {
         setisLoading(false)
       });
       if (result.data.status) {
-        handleLogin()
+       await AsyncStorage.multiRemove(["@Email", "@Login"])
+       showFlash("Your Account is under review by admin, you can login when its verified", "warning", "auto")
       } else {
         showFlash(result.data.message, 'danger', 'none')
       }
@@ -46,6 +47,7 @@ const Verify = (props) => {
   }
 
   const handleLogin = async () => {
+    alert("")
     OneSignal.getDeviceState()
     .then(async (data) => {
 
