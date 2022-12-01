@@ -68,7 +68,7 @@ const ChangePassword = (props) => {
             <View style={styles.sectionContainer}>
 
               <View style={styles.inputContainer}>
-                <Label style={styles.labelStyles}>{lang._101}</Label>
+                <Label style={styles.labelStyles}>Enter Current Password</Label>
                 <Auth_Input
                   placeholder={lang._16}
                   isPassword={true}
@@ -77,9 +77,9 @@ const ChangePassword = (props) => {
               </View>
 
               <View style={styles.inputContainer}>
-                <Label style={styles.labelStyles}>{lang._102}</Label>
+                <Label style={styles.labelStyles}>Enter New Password</Label>
                 <Auth_Input
-                  placeholder={lang._104}
+                  placeholder={"Change Password"}
                   isPassword={true}
                   onChange={setnewPassword}
                 />

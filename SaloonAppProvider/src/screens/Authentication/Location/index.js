@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput, Alert, Platform } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput, Alert, Platform , SafeAreaView} from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 
 const { width, height } = Dimensions.get('window');
@@ -108,7 +108,7 @@ export default function Location(props) {
     return (
 
 
-        <View style={[Styles.MainConatner]}>
+        <SafeAreaView style={[Styles.MainConatner]}>
 
 
 
@@ -188,7 +188,7 @@ export default function Location(props) {
 
             </View>
 
-        </View>
+        </SafeAreaView>
 
     )
 }
